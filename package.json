@@ -1,5 +1,5 @@
 {
-  "name": "test-leaks",
+  "name": "prisma-leaks",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
