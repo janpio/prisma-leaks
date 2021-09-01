@@ -7,6 +7,7 @@ it("might leak", async () => {
       email: "test",
     },
   });
+  prisma.$disconnect()
   expect(user).toBeTruthy();
   prisma.logMemory()
 });
