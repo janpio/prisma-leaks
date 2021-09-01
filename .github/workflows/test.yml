@@ -20,9 +20,24 @@ jobs:
           - 5432:5432
     env:
       DATABASE_URL: "postgresql://postgres:example@localhost"
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        queryEngine: ['library', 'binary']
+
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set CLI Engine Type
+        run: |
+          echo "PRISMA_CLI_QUERY_ENGINE_TYPE=${{ matrix.queryEngine }}" >> $GITHUB_ENV
+      - name: Set Client Engine Type
+        run: |
+          echo "PRISMA_CLIENT_ENGINE_TYPE=${{ matrix.queryEngine }}" >> $GITHUB_ENV
+
       - run: yarn
       - run: npx prisma db push
       - run: yarn test --runInBand --logHeapUsage
+      - run: yarn test --runInBand --logHeapUsage --silent=false
       - run: yarn test --runInBand --detectLeaks query

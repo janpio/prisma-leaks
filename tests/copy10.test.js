@@ -8,4 +8,5 @@ it("might leak", async () => {
     },
   });
   expect(user).toBeTruthy();
+  prisma.logMemory()
 });
