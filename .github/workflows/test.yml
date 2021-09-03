@@ -4,6 +4,9 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        engine: ["library", "binary"]
     services:
       postgres:
         image: postgres
@@ -23,5 +26,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: npx prisma db push
-      - run: yarn test --runInBand --logHeapUsage --detectLeaks
+      - run: npx prisma db push --schema prisma/${{matrix.engine}}.prisma
+      - run: node --expose-gc ./node_modules/.bin/jest --runInBand --logHeapUsage --no-cache
