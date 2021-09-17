@@ -1,19 +1,6 @@
-const factories = require("../src/factories");
-const prisma = require("../src/index");
-const Factory = require("factory.ts");
-const { sampleSize } = require("lodash");
-
-const seeded = {
-  customUserAttr: Factory.Async.makeFactoryFromSync(
-    factories.customUserAttrFactory.builder
-  ).transform((data) => prisma.user_custom_attributes.create({ data })),
-  userStatus: Factory.Async.makeFactoryFromSync(
-    factories.userStatusFactory.builder
-  ).transform((data) => prisma.user_statuses.create({ data })),
-  user: Factory.Async.makeFactoryFromSync(
-    factories.userFactory.builder
-  ).transform((data) => prisma.users.create({ data })),
-};
+import { sampleSize } from "lodash";
+import { prisma } from "../src";
+import { seeded } from "../src/factories";
 
 afterAll(async () => {
   await prisma.$disconnect();
