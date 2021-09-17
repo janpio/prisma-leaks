@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        tests: [10, 50]
         engine: ["library", "binary"]
     services:
       postgres:
@@ -26,5 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
+      - run: python inflate_tests.py ${{matrix.tests}}
       - run: npx prisma db push --schema prisma/${{matrix.engine}}.prisma
       - run: node --expose-gc ./node_modules/.bin/jest --runInBand --logHeapUsage --no-cache
