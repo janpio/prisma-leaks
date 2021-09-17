@@ -5,10 +5,11 @@ afterAll(async () => {
 });
 
 it("might leak", async () => {
-  await prisma.user.deleteMany();
-  const user = await prisma.user.create({
+  await prisma.users.deleteMany();
+  const user = await prisma.users.create({
     data: {
       email: "test",
+      projects_limit: 99,
     },
   });
   expect(user).toBeTruthy();
