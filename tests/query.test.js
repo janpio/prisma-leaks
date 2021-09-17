@@ -60,8 +60,8 @@ describe("users", () => {
   });
 
   it("should support related field updates", async () => {
-    const userList = await seeded.user.buildList(500);
-    const randomUserEmails = sampleSize(userList, 20).map(({ email }) => email);
+    const userList = await seeded.user.buildList(50);
+    const randomUserEmails = sampleSize(userList, 10).map(({ email }) => email);
 
     const customUserAttrKeys = (
       await prisma.user_custom_attributes.findMany({
