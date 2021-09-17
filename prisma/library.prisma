@@ -1,0 +1,3032 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model abuse_reports {
+    id                      Int       @id @default(autoincrement())
+    reporter_id             Int?
+    user_id                 Int?
+    message                 String?
+    created_at              DateTime? @db.Timestamp(6)
+    updated_at              DateTime? @db.Timestamp(6)
+    message_html            String?
+    cached_markdown_version Int?
+}
+
+model appearances {
+    id                              Int      @id @default(autoincrement())
+    title                           String   @db.VarChar
+    description                     String
+    header_logo                     String?  @db.VarChar
+    logo                            String?  @db.VarChar
+    created_at                      DateTime @db.Timestamptz(6)
+    updated_at                      DateTime @db.Timestamptz(6)
+    description_html                String?
+    cached_markdown_version         Int?
+    new_project_guidelines          String?
+    new_project_guidelines_html     String?
+    header_message                  String?
+    header_message_html             String?
+    footer_message                  String?
+    footer_message_html             String?
+    message_background_color        String?
+    message_font_color              String?
+    favicon                         String?  @db.VarChar
+    email_header_and_footer_enabled Boolean  @default(false)
+}
+
+model application_setting_terms {
+    id                      Int               @id @default(autoincrement())
+    cached_markdown_version Int?
+    terms                   String
+    terms_html              String?
+    term_agreements         term_agreements[]
+    users                   users[]
+}
+
+model application_settings {
+    id                                             Int       @id @default(autoincrement())
+    default_projects_limit                         Int?
+    signup_enabled                                 Boolean?
+    gravatar_enabled                               Boolean?
+    sign_in_text                                   String?
+    created_at                                     DateTime? @db.Timestamp(6)
+    updated_at                                     DateTime? @db.Timestamp(6)
+    home_page_url                                  String?   @db.VarChar
+    default_branch_protection                      Int?      @default(2)
+    restricted_visibility_levels                   String?
+    version_check_enabled                          Boolean?  @default(true)
+    max_attachment_size                            Int       @default(10)
+    default_project_visibility                     Int?
+    default_snippet_visibility                     Int?
+    domain_whitelist                               String?
+    user_oauth_applications                        Boolean?  @default(true)
+    after_sign_out_path                            String?   @db.VarChar
+    session_expire_delay                           Int       @default(10080)
+    import_sources                                 String?
+    help_page_text                                 String?
+    admin_notification_email                       String?   @db.VarChar
+    shared_runners_enabled                         Boolean   @default(true)
+    max_artifacts_size                             Int       @default(100)
+    runners_registration_token                     String?   @db.VarChar
+    max_pages_size                                 Int       @default(100)
+    require_two_factor_authentication              Boolean?  @default(false)
+    two_factor_grace_period                        Int?      @default(48)
+    metrics_enabled                                Boolean?  @default(false)
+    metrics_host                                   String?   @default("localhost") @db.VarChar
+    metrics_pool_size                              Int?      @default(16)
+    metrics_timeout                                Int?      @default(10)
+    metrics_method_call_threshold                  Int?      @default(10)
+    recaptcha_enabled                              Boolean?  @default(false)
+    recaptcha_site_key                             String?   @db.VarChar
+    recaptcha_private_key                          String?   @db.VarChar
+    metrics_port                                   Int?      @default(8089)
+    akismet_enabled                                Boolean?  @default(false)
+    akismet_api_key                                String?   @db.VarChar
+    metrics_sample_interval                        Int?      @default(15)
+    sentry_enabled                                 Boolean?  @default(false)
+    sentry_dsn                                     String?   @db.VarChar
+    email_author_in_body                           Boolean?  @default(false)
+    default_group_visibility                       Int?
+    repository_checks_enabled                      Boolean?  @default(false)
+    shared_runners_text                            String?
+    metrics_packet_size                            Int?      @default(1)
+    disabled_oauth_sign_in_sources                 String?
+    health_check_access_token                      String?   @db.VarChar
+    send_user_confirmation_email                   Boolean?  @default(false)
+    container_registry_token_expire_delay          Int?      @default(5)
+    after_sign_up_text                             String?
+    user_default_external                          Boolean   @default(false)
+    repository_storages                            String?   @default("default") @db.VarChar
+    enabled_git_access_protocol                    String?   @db.VarChar
+    domain_blacklist_enabled                       Boolean?  @default(false)
+    domain_blacklist                               String?
+    usage_ping_enabled                             Boolean   @default(true)
+    sign_in_text_html                              String?
+    help_page_text_html                            String?
+    shared_runners_text_html                       String?
+    after_sign_up_text_html                        String?
+    rsa_key_restriction                            Int       @default(0)
+    dsa_key_restriction                            Int       @default(-1)
+    ecdsa_key_restriction                          Int       @default(0)
+    ed25519_key_restriction                        Int       @default(0)
+    housekeeping_enabled                           Boolean   @default(true)
+    housekeeping_bitmaps_enabled                   Boolean   @default(true)
+    housekeeping_incremental_repack_period         Int       @default(10)
+    housekeeping_full_repack_period                Int       @default(50)
+    housekeeping_gc_period                         Int       @default(200)
+    html_emails_enabled                            Boolean?  @default(true)
+    plantuml_url                                   String?   @db.VarChar
+    plantuml_enabled                               Boolean?
+    terminal_max_session_time                      Int       @default(0)
+    unique_ips_limit_per_user                      Int?
+    unique_ips_limit_time_window                   Int?
+    unique_ips_limit_enabled                       Boolean   @default(false)
+    default_artifacts_expire_in                    String    @default("0") @db.VarChar
+    uuid                                           String?   @db.VarChar
+    polling_interval_multiplier                    Decimal   @default(1.0) @db.Decimal
+    cached_markdown_version                        Int?
+    clientside_sentry_enabled                      Boolean   @default(false)
+    clientside_sentry_dsn                          String?   @db.VarChar
+    prometheus_metrics_enabled                     Boolean   @default(true)
+    help_page_hide_commercial_content              Boolean?  @default(false)
+    help_page_support_url                          String?   @db.VarChar
+    performance_bar_allowed_group_id               Int?
+    hashed_storage_enabled                         Boolean   @default(false)
+    project_export_enabled                         Boolean   @default(true)
+    auto_devops_enabled                            Boolean   @default(true)
+    throttle_unauthenticated_enabled               Boolean   @default(false)
+    throttle_unauthenticated_requests_per_period   Int       @default(3600)
+    throttle_unauthenticated_period_in_seconds     Int       @default(3600)
+    throttle_authenticated_api_enabled             Boolean   @default(false)
+    throttle_authenticated_api_requests_per_period Int       @default(7200)
+    throttle_authenticated_api_period_in_seconds   Int       @default(3600)
+    throttle_authenticated_web_enabled             Boolean   @default(false)
+    throttle_authenticated_web_requests_per_period Int       @default(7200)
+    throttle_authenticated_web_period_in_seconds   Int       @default(3600)
+    password_authentication_enabled_for_web        Boolean?
+    password_authentication_enabled_for_git        Boolean?  @default(true)
+    gitaly_timeout_default                         Int       @default(55)
+    gitaly_timeout_medium                          Int       @default(30)
+    gitaly_timeout_fast                            Int       @default(10)
+    authorized_keys_enabled                        Boolean   @default(true)
+    auto_devops_domain                             String?   @db.VarChar
+    pages_domain_verification_enabled              Boolean   @default(true)
+    user_default_internal_regex                    String?   @db.VarChar
+    allow_local_requests_from_hooks_and_services   Boolean   @default(false)
+    enforce_terms                                  Boolean?  @default(false)
+    mirror_available                               Boolean   @default(true)
+    hide_third_party_offers                        Boolean   @default(false)
+    instance_statistics_visibility_private         Boolean   @default(false)
+    web_ide_clientside_preview_enabled             Boolean   @default(false)
+    user_show_add_ssh_key_message                  Boolean   @default(true)
+    usage_stats_set_by_user_id                     Int?
+    receive_max_input_size                         Int?
+    diff_max_patch_bytes                           Int       @default(102400)
+    archive_builds_in_seconds                      Int?
+    commit_email_hostname                          String?   @db.VarChar
+    protected_ci_variables                         Boolean   @default(false)
+    runners_registration_token_encrypted           String?   @db.VarChar
+    local_markdown_version                         Int       @default(0)
+    first_day_of_week                              Int       @default(0)
+    default_project_creation                       Int       @default(2)
+    external_authorization_service_enabled         Boolean   @default(false)
+    external_authorization_service_url             String?   @db.VarChar
+    external_authorization_service_default_label   String?   @db.VarChar
+    external_authorization_service_timeout         Float?    @default(0.5)
+    external_auth_client_cert                      String?
+    encrypted_external_auth_client_key             String?
+    encrypted_external_auth_client_key_iv          String?   @db.VarChar
+    encrypted_external_auth_client_key_pass        String?   @db.VarChar
+    encrypted_external_auth_client_key_pass_iv     String?   @db.VarChar
+    lets_encrypt_notification_email                String?   @db.VarChar
+    lets_encrypt_terms_of_service_accepted         Boolean   @default(false)
+    elasticsearch_shards                           Int       @default(5)
+    elasticsearch_replicas                         Int       @default(1)
+    encrypted_lets_encrypt_private_key             String?
+    encrypted_lets_encrypt_private_key_iv          String?
+    dns_rebinding_protection_enabled               Boolean   @default(true)
+    default_project_deletion_protection            Boolean   @default(false)
+    users                                          users?    @relation(fields: [usage_stats_set_by_user_id], references: [id], onUpdate: NoAction)
+
+    @@index([usage_stats_set_by_user_id])
+}
+
+model ar_internal_metadata {
+    key        String   @id @db.VarChar
+    value      String?  @db.VarChar
+    created_at DateTime @db.Timestamp(6)
+    updated_at DateTime @db.Timestamp(6)
+}
+
+model audit_events {
+    id          Int       @id @default(autoincrement())
+    author_id   Int
+    type        String    @db.VarChar
+    entity_id   Int
+    entity_type String    @db.VarChar
+    details     String?
+    created_at  DateTime? @db.Timestamp(6)
+    updated_at  DateTime? @db.Timestamp(6)
+
+    @@index([entity_id, entity_type])
+}
+
+model award_emoji {
+    id             Int       @id @default(autoincrement())
+    name           String?   @db.VarChar
+    user_id        Int?
+    awardable_id   Int?
+    awardable_type String?   @db.VarChar
+    created_at     DateTime? @db.Timestamp(6)
+    updated_at     DateTime? @db.Timestamp(6)
+
+    @@index([awardable_type, awardable_id])
+    @@index([user_id, name])
+}
+
+model badges {
+    id         Int         @id @default(autoincrement())
+    link_url   String      @db.VarChar
+    image_url  String      @db.VarChar
+    project_id Int?
+    group_id   Int?
+    type       String      @db.VarChar
+    created_at DateTime    @db.Timestamptz(6)
+    updated_at DateTime    @db.Timestamptz(6)
+    namespaces namespaces? @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects   projects?   @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([group_id])
+    @@index([project_id])
+}
+
+model board_group_recent_visits {
+    id         BigInt      @id @default(autoincrement())
+    created_at DateTime    @db.Timestamptz(6)
+    updated_at DateTime    @db.Timestamptz(6)
+    user_id    Int?
+    board_id   Int?
+    group_id   Int?
+    boards     boards?     @relation(fields: [board_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    namespaces namespaces? @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users      users?      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([user_id, group_id, board_id])
+    @@index([board_id])
+    @@index([group_id])
+    @@index([user_id])
+}
+
+model board_project_recent_visits {
+    id         BigInt    @id @default(autoincrement())
+    created_at DateTime  @db.Timestamptz(6)
+    updated_at DateTime  @db.Timestamptz(6)
+    user_id    Int?
+    project_id Int?
+    board_id   Int?
+    boards     boards?   @relation(fields: [board_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects   projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users      users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([user_id, project_id, board_id])
+    @@index([board_id])
+    @@index([project_id])
+    @@index([user_id])
+}
+
+model boards {
+    id                          Int                           @id @default(autoincrement())
+    project_id                  Int?
+    created_at                  DateTime                      @db.Timestamp(6)
+    updated_at                  DateTime                      @db.Timestamp(6)
+    group_id                    Int?
+    namespaces                  namespaces?                   @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects                    projects?                     @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    board_group_recent_visits   board_group_recent_visits[]
+    board_project_recent_visits board_project_recent_visits[]
+    lists                       lists[]
+
+    @@index([group_id])
+    @@index([project_id])
+}
+
+model broadcast_messages {
+    id                      Int      @id @default(autoincrement())
+    message                 String
+    starts_at               DateTime @db.Timestamp(6)
+    ends_at                 DateTime @db.Timestamp(6)
+    created_at              DateTime @db.Timestamp(6)
+    updated_at              DateTime @db.Timestamp(6)
+    color                   String?  @db.VarChar
+    font                    String?  @db.VarChar
+    message_html            String
+    cached_markdown_version Int?
+
+    @@index([starts_at, ends_at, id])
+}
+
+model chat_names {
+    id                    Int                     @id @default(autoincrement())
+    user_id               Int
+    service_id            Int
+    team_id               String                  @db.VarChar
+    team_domain           String?                 @db.VarChar
+    chat_id               String                  @db.VarChar
+    chat_name             String?                 @db.VarChar
+    last_used_at          DateTime?               @db.Timestamp(6)
+    created_at            DateTime                @db.Timestamp(6)
+    updated_at            DateTime                @db.Timestamp(6)
+    ci_pipeline_chat_data ci_pipeline_chat_data[]
+
+    @@unique([service_id, team_id, chat_id])
+    @@unique([user_id, service_id])
+}
+
+model chat_teams {
+    id           Int        @id @default(autoincrement())
+    namespace_id Int        @unique
+    team_id      String?    @db.VarChar
+    name         String?    @db.VarChar
+    created_at   DateTime   @db.Timestamp(6)
+    updated_at   DateTime   @db.Timestamp(6)
+    namespaces   namespaces @relation(fields: [namespace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model ci_build_trace_chunks {
+    id          BigInt    @id @default(autoincrement())
+    build_id    Int
+    chunk_index Int
+    data_store  Int
+    raw_data    Bytes?
+    ci_builds   ci_builds @relation(fields: [build_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([build_id, chunk_index])
+}
+
+model ci_build_trace_section_names {
+    id                      Int                       @id @default(autoincrement())
+    project_id              Int
+    name                    String                    @db.VarChar
+    projects                projects                  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_build_trace_sections ci_build_trace_sections[]
+
+    @@unique([project_id, name])
+}
+
+model ci_build_trace_sections {
+    id                           Int                          @id @default(autoincrement())
+    project_id                   Int
+    date_start                   DateTime                     @db.Timestamptz(6)
+    date_end                     DateTime                     @db.Timestamptz(6)
+    byte_start                   BigInt
+    byte_end                     BigInt
+    build_id                     Int
+    section_name_id              Int
+    ci_builds                    ci_builds                    @relation(fields: [build_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects                     projects                     @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_build_trace_section_names ci_build_trace_section_names @relation(fields: [section_name_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([build_id, section_name_id])
+    @@index([project_id])
+    @@index([section_name_id])
+}
+
+model ci_builds {
+    id                                                       Int                       @id @default(autoincrement())
+    status                                                   String?                   @db.VarChar
+    finished_at                                              DateTime?                 @db.Timestamp(6)
+    trace                                                    String?
+    created_at                                               DateTime?                 @db.Timestamp(6)
+    updated_at                                               DateTime?                 @db.Timestamp(6)
+    started_at                                               DateTime?                 @db.Timestamp(6)
+    runner_id                                                Int?
+    coverage                                                 Float?
+    commit_id                                                Int?
+    commands                                                 String?
+    name                                                     String?                   @db.VarChar
+    options                                                  String?
+    allow_failure                                            Boolean                   @default(false)
+    stage                                                    String?                   @db.VarChar
+    trigger_request_id                                       Int?
+    stage_idx                                                Int?
+    tag                                                      Boolean?
+    ref                                                      String?                   @db.VarChar
+    user_id                                                  Int?
+    type                                                     String?                   @db.VarChar
+    target_url                                               String?                   @db.VarChar
+    description                                              String?                   @db.VarChar
+    artifacts_file                                           String?
+    project_id                                               Int?
+    artifacts_metadata                                       String?
+    erased_by_id                                             Int?
+    erased_at                                                DateTime?                 @db.Timestamp(6)
+    artifacts_expire_at                                      DateTime?                 @db.Timestamp(6)
+    environment                                              String?                   @db.VarChar
+    artifacts_size                                           BigInt?
+    when                                                     String?                   @db.VarChar
+    yaml_variables                                           String?
+    queued_at                                                DateTime?                 @db.Timestamp(6)
+    token                                                    String?                   @unique @db.VarChar
+    lock_version                                             Int?
+    coverage_regex                                           String?                   @db.VarChar
+    auto_canceled_by_id                                      Int?
+    retried                                                  Boolean?
+    stage_id                                                 Int?
+    artifacts_file_store                                     Int?
+    artifacts_metadata_store                                 Int?
+    protected                                                Boolean?
+    failure_reason                                           Int?
+    scheduled_at                                             DateTime?                 @db.Timestamptz(6)
+    token_encrypted                                          String?                   @db.VarChar
+    ci_pipelines_ci_builds_auto_canceled_by_idToci_pipelines ci_pipelines?             @relation("ci_builds_auto_canceled_by_idToci_pipelines", fields: [auto_canceled_by_id], references: [id], onUpdate: NoAction)
+    ci_pipelines_ci_builds_commit_idToci_pipelines           ci_pipelines?             @relation("ci_builds_commit_idToci_pipelines", fields: [commit_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects                                                 projects?                 @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_stages                                                ci_stages?                @relation(fields: [stage_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_build_trace_chunks                                    ci_build_trace_chunks[]
+    ci_build_trace_sections                                  ci_build_trace_sections[]
+    ci_builds_metadata                                       ci_builds_metadata?
+    ci_builds_runner_session                                 ci_builds_runner_session?
+    ci_job_artifacts                                         ci_job_artifacts[]
+
+    @@index([auto_canceled_by_id])
+    @@index([commit_id, stage_idx, created_at])
+    @@index([commit_id, status, type])
+    @@index([commit_id, type, name, ref])
+    @@index([commit_id, type, ref])
+    @@index([project_id, id])
+    @@index([protected])
+    @@index([queued_at])
+    @@index([runner_id])
+    @@index([stage_id])
+    @@index([status, type, runner_id])
+    @@index([updated_at])
+    @@index([user_id])
+}
+
+model ci_builds_metadata {
+    id               Int       @id @default(autoincrement())
+    build_id         Int       @unique
+    project_id       Int
+    timeout          Int?
+    timeout_source   Int       @default(1)
+    config_options   Json?
+    config_variables Json?
+    ci_builds        ci_builds @relation(fields: [build_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects         projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([project_id])
+}
+
+model ci_builds_runner_session {
+    id            BigInt    @id @default(autoincrement())
+    build_id      Int       @unique
+    url           String    @db.VarChar
+    certificate   String?   @db.VarChar
+    authorization String?   @db.VarChar
+    ci_builds     ci_builds @relation(fields: [build_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model ci_group_variables {
+    id                   Int        @id @default(autoincrement())
+    key                  String     @db.VarChar
+    value                String?
+    encrypted_value      String?
+    encrypted_value_salt String?    @db.VarChar
+    encrypted_value_iv   String?    @db.VarChar
+    group_id             Int
+    protected            Boolean    @default(false)
+    created_at           DateTime   @db.Timestamptz(6)
+    updated_at           DateTime   @db.Timestamptz(6)
+    masked               Boolean    @default(false)
+    variable_type        Int        @default(1) @db.SmallInt
+    namespaces           namespaces @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([group_id, key])
+}
+
+model ci_job_artifacts {
+    id            Int       @id @default(autoincrement())
+    project_id    Int
+    job_id        Int
+    file_type     Int
+    file_store    Int?
+    size          BigInt?
+    created_at    DateTime  @db.Timestamptz(6)
+    updated_at    DateTime  @db.Timestamptz(6)
+    expire_at     DateTime? @db.Timestamptz(6)
+    file          String?   @db.VarChar
+    file_sha256   Bytes?
+    file_format   Int?      @db.SmallInt
+    file_location Int?      @db.SmallInt
+    ci_builds     ci_builds @relation(fields: [job_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects      projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([job_id, file_type])
+    @@index([expire_at, job_id])
+    @@index([file_store])
+    @@index([project_id])
+}
+
+model ci_pipeline_chat_data {
+    id           BigInt       @id @default(autoincrement())
+    pipeline_id  Int          @unique
+    chat_name_id Int
+    response_url String
+    chat_names   chat_names   @relation(fields: [chat_name_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_pipelines ci_pipelines @relation(fields: [pipeline_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([chat_name_id])
+}
+
+model ci_pipeline_schedule_variables {
+    id                    BigInt                @id @default(autoincrement())
+    key                   String                @db.VarChar
+    value                 String?
+    encrypted_value       String?
+    encrypted_value_salt  String?               @db.VarChar
+    encrypted_value_iv    String?               @db.VarChar
+    pipeline_schedule_id  Int
+    created_at            DateTime?             @db.Timestamptz(6)
+    updated_at            DateTime?             @db.Timestamptz(6)
+    variable_type         Int                   @default(1) @db.SmallInt
+    ci_pipeline_schedules ci_pipeline_schedules @relation(fields: [pipeline_schedule_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([pipeline_schedule_id, key])
+}
+
+model ci_pipeline_schedules {
+    id                             Int                              @id @default(autoincrement())
+    description                    String?                          @db.VarChar
+    ref                            String?                          @db.VarChar
+    cron                           String?                          @db.VarChar
+    cron_timezone                  String?                          @db.VarChar
+    next_run_at                    DateTime?                        @db.Timestamp(6)
+    project_id                     Int?
+    owner_id                       Int?
+    active                         Boolean?                         @default(true)
+    created_at                     DateTime?                        @db.Timestamp(6)
+    updated_at                     DateTime?                        @db.Timestamp(6)
+    users                          users?                           @relation(fields: [owner_id], references: [id], onUpdate: NoAction)
+    projects                       projects?                        @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_pipeline_schedule_variables ci_pipeline_schedule_variables[]
+    ci_pipelines                   ci_pipelines[]
+
+    @@index([next_run_at, active])
+    @@index([owner_id])
+    @@index([project_id])
+}
+
+model ci_pipeline_variables {
+    id                   Int          @id @default(autoincrement())
+    key                  String       @db.VarChar
+    value                String?
+    encrypted_value      String?
+    encrypted_value_salt String?      @db.VarChar
+    encrypted_value_iv   String?      @db.VarChar
+    pipeline_id          Int
+    variable_type        Int          @default(1) @db.SmallInt
+    ci_pipelines         ci_pipelines @relation(fields: [pipeline_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([pipeline_id, key])
+}
+
+model ci_pipelines {
+    id                                                           Int                     @id @default(autoincrement())
+    ref                                                          String?                 @db.VarChar
+    sha                                                          String?                 @db.VarChar
+    before_sha                                                   String?                 @db.VarChar
+    created_at                                                   DateTime?               @db.Timestamp(6)
+    updated_at                                                   DateTime?               @db.Timestamp(6)
+    tag                                                          Boolean?                @default(false)
+    yaml_errors                                                  String?
+    committed_at                                                 DateTime?               @db.Timestamp(6)
+    project_id                                                   Int?
+    status                                                       String?                 @db.VarChar
+    started_at                                                   DateTime?               @db.Timestamp(6)
+    finished_at                                                  DateTime?               @db.Timestamp(6)
+    duration                                                     Int?
+    user_id                                                      Int?
+    lock_version                                                 Int?
+    auto_canceled_by_id                                          Int?
+    pipeline_schedule_id                                         Int?
+    source                                                       Int?
+    config_source                                                Int?
+    protected                                                    Boolean?
+    failure_reason                                               Int?
+    iid                                                          Int?
+    merge_request_id                                             Int?
+    source_sha                                                   Bytes?
+    target_sha                                                   Bytes?
+    ci_pipelines                                                 ci_pipelines?           @relation("ci_pipelinesToci_pipelines_auto_canceled_by_id", fields: [auto_canceled_by_id], references: [id], onUpdate: NoAction)
+    merge_requests_ci_pipelines_merge_request_idTomerge_requests merge_requests?         @relation("ci_pipelines_merge_request_idTomerge_requests", fields: [merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_pipeline_schedules                                        ci_pipeline_schedules?  @relation(fields: [pipeline_schedule_id], references: [id], onUpdate: NoAction)
+    projects                                                     projects?               @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_builds_ci_builds_auto_canceled_by_idToci_pipelines        ci_builds[]             @relation("ci_builds_auto_canceled_by_idToci_pipelines")
+    ci_builds_ci_builds_commit_idToci_pipelines                  ci_builds[]             @relation("ci_builds_commit_idToci_pipelines")
+    ci_pipeline_chat_data                                        ci_pipeline_chat_data?
+    ci_pipeline_variables                                        ci_pipeline_variables[]
+    other_ci_pipelines                                           ci_pipelines[]          @relation("ci_pipelinesToci_pipelines_auto_canceled_by_id")
+    ci_stages                                                    ci_stages[]
+    merge_request_metrics                                        merge_request_metrics[]
+    merge_requests_ci_pipelinesTomerge_requests_head_pipeline_id merge_requests[]        @relation("ci_pipelinesTomerge_requests_head_pipeline_id")
+    merge_trains                                                 merge_trains[]
+
+    @@index([auto_canceled_by_id])
+    @@index([pipeline_schedule_id])
+    @@index([project_id])
+    @@index([project_id, ref, status, id])
+    @@index([project_id, sha])
+    @@index([project_id, source])
+    @@index([project_id, status, config_source])
+    @@index([project_id, ref, id])
+    @@index([status])
+    @@index([user_id])
+}
+
+model ci_runner_namespaces {
+    id           Int         @id @default(autoincrement())
+    runner_id    Int?
+    namespace_id Int?
+    namespaces   namespaces? @relation(fields: [namespace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_runners   ci_runners? @relation(fields: [runner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([runner_id, namespace_id])
+    @@index([namespace_id])
+}
+
+model ci_runner_projects {
+    id         Int       @id @default(autoincrement())
+    runner_id  Int
+    created_at DateTime? @db.Timestamp(6)
+    updated_at DateTime? @db.Timestamp(6)
+    project_id Int?
+    projects   projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([project_id])
+    @@index([runner_id])
+}
+
+model ci_runners {
+    id                            Int                             @id @default(autoincrement())
+    token                         String?                         @db.VarChar
+    created_at                    DateTime?                       @db.Timestamp(6)
+    updated_at                    DateTime?                       @db.Timestamp(6)
+    description                   String?                         @db.VarChar
+    contacted_at                  DateTime?                       @db.Timestamp(6)
+    active                        Boolean                         @default(true)
+    is_shared                     Boolean?                        @default(false)
+    name                          String?                         @db.VarChar
+    version                       String?                         @db.VarChar
+    revision                      String?                         @db.VarChar
+    platform                      String?                         @db.VarChar
+    architecture                  String?                         @db.VarChar
+    run_untagged                  Boolean                         @default(true)
+    locked                        Boolean                         @default(false)
+    access_level                  Int                             @default(0)
+    ip_address                    String?                         @db.VarChar
+    maximum_timeout               Int?
+    runner_type                   Int                             @db.SmallInt
+    token_encrypted               String?                         @db.VarChar
+    ci_runner_namespaces          ci_runner_namespaces[]
+    clusters_applications_runners clusters_applications_runners[]
+
+    @@index([contacted_at])
+    @@index([is_shared])
+    @@index([locked])
+    @@index([runner_type])
+    @@index([token])
+    @@index([token_encrypted])
+}
+
+model ci_stages {
+    id           Int           @id @default(autoincrement())
+    project_id   Int?
+    pipeline_id  Int?
+    created_at   DateTime?     @db.Timestamp(6)
+    updated_at   DateTime?     @db.Timestamp(6)
+    name         String?       @db.VarChar
+    status       Int?
+    lock_version Int?
+    position     Int?
+    ci_pipelines ci_pipelines? @relation(fields: [pipeline_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects     projects?     @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_builds    ci_builds[]
+
+    @@unique([pipeline_id, name])
+    @@index([pipeline_id])
+    @@index([pipeline_id, position])
+    @@index([project_id])
+}
+
+model ci_trigger_requests {
+    id          Int         @id @default(autoincrement())
+    trigger_id  Int
+    variables   String?
+    created_at  DateTime?   @db.Timestamp(6)
+    updated_at  DateTime?   @db.Timestamp(6)
+    commit_id   Int?
+    ci_triggers ci_triggers @relation(fields: [trigger_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([commit_id])
+    @@index([trigger_id])
+}
+
+model ci_triggers {
+    id                  Int                   @id @default(autoincrement())
+    token               String?               @db.VarChar
+    created_at          DateTime?             @db.Timestamp(6)
+    updated_at          DateTime?             @db.Timestamp(6)
+    project_id          Int?
+    owner_id            Int?
+    description         String?               @db.VarChar
+    ref                 String?               @db.VarChar
+    users               users?                @relation(fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects            projects?             @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_trigger_requests ci_trigger_requests[]
+
+    @@index([owner_id])
+    @@index([project_id])
+}
+
+model ci_variables {
+    id                   Int      @id @default(autoincrement())
+    key                  String   @db.VarChar
+    value                String?
+    encrypted_value      String?
+    encrypted_value_salt String?  @db.VarChar
+    encrypted_value_iv   String?  @db.VarChar
+    project_id           Int
+    protected            Boolean  @default(false)
+    environment_scope    String   @default("*") @db.VarChar
+    masked               Boolean  @default(false)
+    variable_type        Int      @default(1) @db.SmallInt
+    projects             projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, key, environment_scope])
+}
+
+model cluster_groups {
+    id         Int        @id @default(autoincrement())
+    cluster_id Int
+    group_id   Int
+    clusters   clusters   @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    namespaces namespaces @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([cluster_id, group_id])
+    @@index([group_id])
+}
+
+model cluster_platforms_kubernetes {
+    id                    Int      @id @default(autoincrement())
+    cluster_id            Int      @unique
+    created_at            DateTime @db.Timestamptz(6)
+    updated_at            DateTime @db.Timestamptz(6)
+    api_url               String?
+    ca_cert               String?
+    namespace             String?  @db.VarChar
+    username              String?  @db.VarChar
+    encrypted_password    String?
+    encrypted_password_iv String?  @db.VarChar
+    encrypted_token       String?
+    encrypted_token_iv    String?  @db.VarChar
+    authorization_type    Int?     @db.SmallInt
+    clusters              clusters @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model cluster_projects {
+    id                             Int                              @id @default(autoincrement())
+    project_id                     Int
+    cluster_id                     Int
+    created_at                     DateTime                         @db.Timestamptz(6)
+    updated_at                     DateTime                         @db.Timestamptz(6)
+    clusters                       clusters                         @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects                       projects                         @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    clusters_kubernetes_namespaces clusters_kubernetes_namespaces[]
+
+    @@index([cluster_id])
+    @@index([project_id])
+}
+
+model cluster_providers_gcp {
+    id                        Int      @id @default(autoincrement())
+    cluster_id                Int      @unique
+    status                    Int?
+    num_nodes                 Int
+    created_at                DateTime @db.Timestamptz(6)
+    updated_at                DateTime @db.Timestamptz(6)
+    status_reason             String?
+    gcp_project_id            String   @db.VarChar
+    zone                      String   @db.VarChar
+    machine_type              String?  @db.VarChar
+    operation_id              String?  @db.VarChar
+    endpoint                  String?  @db.VarChar
+    encrypted_access_token    String?
+    encrypted_access_token_iv String?  @db.VarChar
+    legacy_abac               Boolean  @default(false)
+    clusters                  clusters @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model clusters {
+    id                                  Int                                  @id @default(autoincrement())
+    user_id                             Int?
+    provider_type                       Int?
+    platform_type                       Int?
+    created_at                          DateTime                             @db.Timestamptz(6)
+    updated_at                          DateTime                             @db.Timestamptz(6)
+    enabled                             Boolean?                             @default(true)
+    name                                String                               @db.VarChar
+    environment_scope                   String                               @default("*") @db.VarChar
+    cluster_type                        Int                                  @default(3) @db.SmallInt
+    domain                              String?                              @db.VarChar
+    managed                             Boolean                              @default(true)
+    users                               users?                               @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+    cluster_groups                      cluster_groups[]
+    cluster_platforms_kubernetes        cluster_platforms_kubernetes?
+    cluster_projects                    cluster_projects[]
+    cluster_providers_gcp               cluster_providers_gcp?
+    clusters_applications_cert_managers clusters_applications_cert_managers?
+    clusters_applications_helm          clusters_applications_helm?
+    clusters_applications_ingress       clusters_applications_ingress?
+    clusters_applications_jupyter       clusters_applications_jupyter?
+    clusters_applications_knative       clusters_applications_knative?
+    clusters_applications_prometheus    clusters_applications_prometheus?
+    clusters_applications_runners       clusters_applications_runners?
+    clusters_kubernetes_namespaces      clusters_kubernetes_namespaces[]
+
+    @@index([enabled])
+    @@index([user_id])
+}
+
+model clusters_applications_cert_managers {
+    id            Int      @id @default(autoincrement())
+    cluster_id    Int      @unique
+    status        Int
+    version       String   @db.VarChar
+    email         String   @db.VarChar
+    created_at    DateTime @db.Timestamptz(6)
+    updated_at    DateTime @db.Timestamptz(6)
+    status_reason String?
+    clusters      clusters @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model clusters_applications_helm {
+    id                  Int      @id @default(autoincrement())
+    cluster_id          Int      @unique
+    created_at          DateTime @db.Timestamptz(6)
+    updated_at          DateTime @db.Timestamptz(6)
+    status              Int
+    version             String   @db.VarChar
+    status_reason       String?
+    encrypted_ca_key    String?
+    encrypted_ca_key_iv String?
+    ca_cert             String?
+    clusters            clusters @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model clusters_applications_ingress {
+    id                Int      @id @default(autoincrement())
+    cluster_id        Int      @unique
+    created_at        DateTime @db.Timestamptz(6)
+    updated_at        DateTime @db.Timestamptz(6)
+    status            Int
+    ingress_type      Int
+    version           String   @db.VarChar
+    cluster_ip        String?  @db.VarChar
+    status_reason     String?
+    external_ip       String?  @db.VarChar
+    external_hostname String?  @db.VarChar
+    clusters          clusters @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model clusters_applications_jupyter {
+    id                   Int                 @id @default(autoincrement())
+    cluster_id           Int                 @unique
+    oauth_application_id Int?
+    status               Int
+    version              String              @db.VarChar
+    hostname             String?             @db.VarChar
+    created_at           DateTime            @db.Timestamptz(6)
+    updated_at           DateTime            @db.Timestamptz(6)
+    status_reason        String?
+    clusters             clusters            @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    oauth_applications   oauth_applications? @relation(fields: [oauth_application_id], references: [id], onUpdate: NoAction)
+
+    @@index([oauth_application_id])
+}
+
+model clusters_applications_knative {
+    id                Int      @id @default(autoincrement())
+    cluster_id        Int      @unique
+    created_at        DateTime @db.Timestamptz(6)
+    updated_at        DateTime @db.Timestamptz(6)
+    status            Int
+    version           String   @db.VarChar
+    hostname          String?  @db.VarChar
+    status_reason     String?
+    external_ip       String?  @db.VarChar
+    external_hostname String?  @db.VarChar
+    clusters          clusters @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model clusters_applications_prometheus {
+    id            Int      @id @default(autoincrement())
+    cluster_id    Int      @unique
+    status        Int
+    version       String   @db.VarChar
+    status_reason String?
+    created_at    DateTime @db.Timestamptz(6)
+    updated_at    DateTime @db.Timestamptz(6)
+    clusters      clusters @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model clusters_applications_runners {
+    id            Int         @id @default(autoincrement())
+    cluster_id    Int         @unique
+    runner_id     Int?
+    status        Int
+    created_at    DateTime    @db.Timestamptz(6)
+    updated_at    DateTime    @db.Timestamptz(6)
+    version       String      @db.VarChar
+    status_reason String?
+    privileged    Boolean     @default(true)
+    clusters      clusters    @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_runners    ci_runners? @relation(fields: [runner_id], references: [id], onUpdate: NoAction)
+
+    @@index([runner_id])
+}
+
+model clusters_kubernetes_namespaces {
+    id                                 BigInt            @id @default(autoincrement())
+    cluster_id                         Int
+    project_id                         Int?
+    cluster_project_id                 Int?
+    created_at                         DateTime          @db.Timestamptz(6)
+    updated_at                         DateTime          @db.Timestamptz(6)
+    encrypted_service_account_token    String?
+    encrypted_service_account_token_iv String?           @db.VarChar
+    namespace                          String            @db.VarChar
+    service_account_name               String?           @db.VarChar
+    clusters                           clusters          @relation(fields: [cluster_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    cluster_projects                   cluster_projects? @relation(fields: [cluster_project_id], references: [id], onUpdate: NoAction)
+    projects                           projects?         @relation(fields: [project_id], references: [id], onUpdate: NoAction)
+
+    @@unique([cluster_id, namespace])
+    @@index([cluster_id])
+    @@index([cluster_project_id])
+    @@index([project_id])
+}
+
+model container_repositories {
+    id         Int      @id @default(autoincrement())
+    project_id Int
+    name       String   @db.VarChar
+    created_at DateTime @db.Timestamp(6)
+    updated_at DateTime @db.Timestamp(6)
+    projects   projects @relation(fields: [project_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@unique([project_id, name])
+    @@index([project_id])
+}
+
+model conversational_development_index_metrics {
+    id                                    Int      @id @default(autoincrement())
+    leader_issues                         Float
+    instance_issues                       Float
+    leader_notes                          Float
+    instance_notes                        Float
+    leader_milestones                     Float
+    instance_milestones                   Float
+    leader_boards                         Float
+    instance_boards                       Float
+    leader_merge_requests                 Float
+    instance_merge_requests               Float
+    leader_ci_pipelines                   Float
+    instance_ci_pipelines                 Float
+    leader_environments                   Float
+    instance_environments                 Float
+    leader_deployments                    Float
+    instance_deployments                  Float
+    leader_projects_prometheus_active     Float
+    instance_projects_prometheus_active   Float
+    leader_service_desk_issues            Float
+    instance_service_desk_issues          Float
+    created_at                            DateTime @db.Timestamp(6)
+    updated_at                            DateTime @db.Timestamp(6)
+    percentage_boards                     Float    @default(0.0)
+    percentage_ci_pipelines               Float    @default(0.0)
+    percentage_deployments                Float    @default(0.0)
+    percentage_environments               Float    @default(0.0)
+    percentage_issues                     Float    @default(0.0)
+    percentage_merge_requests             Float    @default(0.0)
+    percentage_milestones                 Float    @default(0.0)
+    percentage_notes                      Float    @default(0.0)
+    percentage_projects_prometheus_active Float    @default(0.0)
+    percentage_service_desk_issues        Float    @default(0.0)
+}
+
+model deploy_keys_projects {
+    id            Int       @id @default(autoincrement())
+    deploy_key_id Int
+    project_id    Int
+    created_at    DateTime? @db.Timestamp(6)
+    updated_at    DateTime? @db.Timestamp(6)
+    can_push      Boolean   @default(false)
+    projects      projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([project_id])
+}
+
+model deploy_tokens {
+    id                    Int                     @id @default(autoincrement())
+    revoked               Boolean?                @default(false)
+    read_repository       Boolean                 @default(false)
+    read_registry         Boolean                 @default(false)
+    expires_at            DateTime                @db.Timestamptz(6)
+    created_at            DateTime                @db.Timestamptz(6)
+    name                  String                  @db.VarChar
+    token                 String                  @unique @db.VarChar
+    project_deploy_tokens project_deploy_tokens[]
+}
+
+model deployments {
+    id              Int       @id @default(autoincrement())
+    iid             Int
+    project_id      Int
+    environment_id  Int
+    ref             String    @db.VarChar
+    tag             Boolean
+    sha             String    @db.VarChar
+    user_id         Int?
+    deployable_id   Int?
+    deployable_type String?   @db.VarChar
+    created_at      DateTime? @db.Timestamp(6)
+    updated_at      DateTime? @db.Timestamp(6)
+    on_stop         String?   @db.VarChar
+    status          Int       @db.SmallInt
+    finished_at     DateTime? @db.Timestamptz(6)
+    projects        projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, iid])
+    @@index([created_at])
+    @@index([deployable_type, deployable_id])
+    @@index([environment_id, id])
+    @@index([environment_id, iid, project_id])
+    @@index([environment_id, status])
+    @@index([project_id, status])
+    @@index([project_id, status, created_at])
+}
+
+model emails {
+    id                   Int       @id @default(autoincrement())
+    user_id              Int
+    email                String    @unique @db.VarChar
+    created_at           DateTime? @db.Timestamp(6)
+    updated_at           DateTime? @db.Timestamp(6)
+    confirmation_token   String?   @unique @db.VarChar
+    confirmed_at         DateTime? @db.Timestamptz(6)
+    confirmation_sent_at DateTime? @db.Timestamptz(6)
+
+    @@index([user_id])
+}
+
+model environments {
+    id               Int       @id @default(autoincrement())
+    project_id       Int
+    name             String    @db.VarChar
+    created_at       DateTime? @db.Timestamp(6)
+    updated_at       DateTime? @db.Timestamp(6)
+    external_url     String?   @db.VarChar
+    environment_type String?   @db.VarChar
+    state            String    @default("available") @db.VarChar
+    slug             String    @db.VarChar
+    projects         projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, name])
+    @@unique([project_id, slug])
+}
+
+model events {
+    id                  Int                  @id @default(autoincrement())
+    project_id          Int?
+    author_id           Int
+    target_id           Int?
+    created_at          DateTime             @db.Timestamptz(6)
+    updated_at          DateTime             @db.Timestamptz(6)
+    action              Int                  @db.SmallInt
+    target_type         String?              @db.VarChar
+    users               users                @relation(fields: [author_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects            projects?            @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    push_event_payloads push_event_payloads?
+
+    @@index([action])
+    @@index([author_id, project_id])
+    @@index([project_id, created_at])
+    @@index([project_id, id])
+    @@index([target_type, target_id])
+}
+
+model feature_gates {
+    id          Int      @id @default(autoincrement())
+    feature_key String   @db.VarChar
+    key         String   @db.VarChar
+    value       String?  @db.VarChar
+    created_at  DateTime @db.Timestamp(6)
+    updated_at  DateTime @db.Timestamp(6)
+
+    @@unique([feature_key, key, value])
+}
+
+model features {
+    id         Int      @id @default(autoincrement())
+    key        String   @unique @db.VarChar
+    created_at DateTime @db.Timestamp(6)
+    updated_at DateTime @db.Timestamp(6)
+}
+
+model fork_network_members {
+    id                                                             Int           @id @default(autoincrement())
+    fork_network_id                                                Int
+    project_id                                                     Int           @unique
+    forked_from_project_id                                         Int?
+    fork_networks                                                  fork_networks @relation(fields: [fork_network_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects_fork_network_members_forked_from_project_idToprojects projects?     @relation("fork_network_members_forked_from_project_idToprojects", fields: [forked_from_project_id], references: [id], onUpdate: NoAction)
+    projects_fork_network_members_project_idToprojects             projects      @relation("fork_network_members_project_idToprojects", fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([fork_network_id])
+    @@index([forked_from_project_id])
+}
+
+model fork_networks {
+    id                        Int                    @id @default(autoincrement())
+    root_project_id           Int?                   @unique
+    deleted_root_project_name String?                @db.VarChar
+    projects                  projects?              @relation(fields: [root_project_id], references: [id], onUpdate: NoAction)
+    fork_network_members      fork_network_members[]
+}
+
+model forked_project_links {
+    id                     Int       @id @default(autoincrement())
+    forked_to_project_id   Int       @unique
+    forked_from_project_id Int
+    created_at             DateTime? @db.Timestamp(6)
+    updated_at             DateTime? @db.Timestamp(6)
+    projects               projects  @relation(fields: [forked_to_project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model gpg_key_subkeys {
+    id             Int              @id @default(autoincrement())
+    gpg_key_id     Int
+    keyid          Bytes?           @unique
+    fingerprint    Bytes?           @unique
+    gpg_keys       gpg_keys         @relation(fields: [gpg_key_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    gpg_signatures gpg_signatures[]
+
+    @@index([gpg_key_id])
+}
+
+model gpg_keys {
+    id              Int               @id @default(autoincrement())
+    created_at      DateTime          @db.Timestamptz(6)
+    updated_at      DateTime          @db.Timestamptz(6)
+    user_id         Int?
+    primary_keyid   Bytes?            @unique
+    fingerprint     Bytes?            @unique
+    key             String?
+    users           users?            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    gpg_key_subkeys gpg_key_subkeys[]
+    gpg_signatures  gpg_signatures[]
+
+    @@index([user_id])
+}
+
+model gpg_signatures {
+    id                    Int              @id @default(autoincrement())
+    created_at            DateTime         @db.Timestamptz(6)
+    updated_at            DateTime         @db.Timestamptz(6)
+    project_id            Int?
+    gpg_key_id            Int?
+    commit_sha            Bytes?           @unique
+    gpg_key_primary_keyid Bytes?
+    gpg_key_user_name     String?
+    gpg_key_user_email    String?
+    verification_status   Int              @default(0) @db.SmallInt
+    gpg_key_subkey_id     Int?
+    gpg_keys              gpg_keys?        @relation(fields: [gpg_key_id], references: [id], onUpdate: NoAction)
+    gpg_key_subkeys       gpg_key_subkeys? @relation(fields: [gpg_key_subkey_id], references: [id], onUpdate: NoAction)
+    projects              projects?        @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([gpg_key_id])
+    @@index([gpg_key_primary_keyid])
+    @@index([gpg_key_subkey_id])
+    @@index([project_id])
+}
+
+model group_custom_attributes {
+    id         Int        @id @default(autoincrement())
+    created_at DateTime   @db.Timestamptz(6)
+    updated_at DateTime   @db.Timestamptz(6)
+    group_id   Int
+    key        String     @db.VarChar
+    value      String     @db.VarChar
+    namespaces namespaces @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([group_id, key])
+    @@index([key, value])
+}
+
+model identities {
+    id         Int       @id @default(autoincrement())
+    extern_uid String?   @db.VarChar
+    provider   String?   @db.VarChar
+    user_id    Int?
+    created_at DateTime? @db.Timestamp(6)
+    updated_at DateTime? @db.Timestamp(6)
+
+    @@index([user_id])
+}
+
+model import_export_uploads {
+    id          Int       @id @default(autoincrement())
+    updated_at  DateTime  @db.Timestamptz(6)
+    project_id  Int?
+    import_file String?
+    export_file String?
+    projects    projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([project_id])
+    @@index([updated_at])
+}
+
+model internal_ids {
+    id           BigInt      @id @default(autoincrement())
+    project_id   Int?
+    usage        Int
+    last_value   Int
+    namespace_id Int?
+    namespaces   namespaces? @relation(fields: [namespace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects     projects?   @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([namespace_id])
+    @@index([project_id])
+}
+
+model issue_assignees {
+    user_id  Int
+    issue_id Int
+    issues   issues @relation(fields: [issue_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users    users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([issue_id, user_id])
+    @@index([user_id])
+}
+
+model issue_metrics {
+    id                                 Int       @id @default(autoincrement())
+    issue_id                           Int
+    first_mentioned_in_commit_at       DateTime? @db.Timestamp(6)
+    first_associated_with_milestone_at DateTime? @db.Timestamp(6)
+    first_added_to_board_at            DateTime? @db.Timestamp(6)
+    created_at                         DateTime  @db.Timestamp(6)
+    updated_at                         DateTime  @db.Timestamp(6)
+    issues                             issues    @relation(fields: [issue_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([issue_id])
+}
+
+model issues {
+    id                                Int                             @id @default(autoincrement())
+    title                             String?                         @db.VarChar
+    author_id                         Int?
+    project_id                        Int?
+    created_at                        DateTime?                       @db.Timestamp(6)
+    updated_at                        DateTime?                       @db.Timestamp(6)
+    description                       String?
+    milestone_id                      Int?
+    state                             String?                         @db.VarChar
+    iid                               Int?
+    updated_by_id                     Int?
+    confidential                      Boolean                         @default(false)
+    due_date                          DateTime?                       @db.Date
+    moved_to_id                       Int?
+    lock_version                      Int?
+    title_html                        String?
+    description_html                  String?
+    time_estimate                     Int?
+    relative_position                 Int?
+    cached_markdown_version           Int?
+    last_edited_at                    DateTime?                       @db.Timestamp(6)
+    last_edited_by_id                 Int?
+    discussion_locked                 Boolean?
+    closed_at                         DateTime?                       @db.Timestamptz(6)
+    closed_by_id                      Int?
+    state_id                          Int?                            @db.SmallInt
+    users_issues_author_idTousers     users?                          @relation("issues_author_idTousers", fields: [author_id], references: [id], onUpdate: NoAction)
+    users_issues_closed_by_idTousers  users?                          @relation("issues_closed_by_idTousers", fields: [closed_by_id], references: [id], onUpdate: NoAction)
+    milestones                        milestones?                     @relation(fields: [milestone_id], references: [id], onUpdate: NoAction)
+    issues                            issues?                         @relation("issuesToissues_moved_to_id", fields: [moved_to_id], references: [id], onUpdate: NoAction)
+    projects                          projects?                       @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users_issues_updated_by_idTousers users?                          @relation("issues_updated_by_idTousers", fields: [updated_by_id], references: [id], onUpdate: NoAction)
+    issue_assignees                   issue_assignees[]
+    issue_metrics                     issue_metrics[]
+    other_issues                      issues[]                        @relation("issuesToissues_moved_to_id")
+    merge_requests_closing_issues     merge_requests_closing_issues[]
+    resource_label_events             resource_label_events[]
+    timelogs                          timelogs[]
+
+    @@unique([project_id, iid])
+    @@index([author_id])
+    @@index([closed_by_id])
+    @@index([confidential])
+    @@index([description])
+    @@index([milestone_id])
+    @@index([project_id, created_at, id, state])
+    @@index([project_id, updated_at, id, state])
+    @@index([relative_position])
+    @@index([state])
+    @@index([title])
+    @@index([updated_at])
+}
+
+model keys {
+    id           Int       @id @default(autoincrement())
+    user_id      Int?
+    created_at   DateTime? @db.Timestamp(6)
+    updated_at   DateTime? @db.Timestamp(6)
+    key          String?
+    title        String?   @db.VarChar
+    type         String?   @db.VarChar
+    fingerprint  String?   @unique @db.VarChar
+    public       Boolean   @default(false)
+    last_used_at DateTime? @db.Timestamp(6)
+
+    @@index([user_id])
+}
+
+model label_links {
+    id          Int       @id @default(autoincrement())
+    label_id    Int?
+    target_id   Int?
+    target_type String?   @db.VarChar
+    created_at  DateTime? @db.Timestamp(6)
+    updated_at  DateTime? @db.Timestamp(6)
+    labels      labels?   @relation(fields: [label_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([label_id])
+    @@index([target_id, target_type])
+}
+
+model label_priorities {
+    id         Int      @id @default(autoincrement())
+    project_id Int
+    label_id   Int
+    priority   Int
+    created_at DateTime @db.Timestamp(6)
+    updated_at DateTime @db.Timestamp(6)
+    labels     labels   @relation(fields: [label_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, label_id])
+    @@index([label_id])
+    @@index([priority])
+}
+
+model labels {
+    id                      Int                     @id @default(autoincrement())
+    title                   String?                 @db.VarChar
+    color                   String?                 @db.VarChar
+    project_id              Int?
+    created_at              DateTime?               @db.Timestamp(6)
+    updated_at              DateTime?               @db.Timestamp(6)
+    template                Boolean?                @default(false)
+    description             String?                 @db.VarChar
+    description_html        String?
+    type                    String?                 @db.VarChar
+    group_id                Int?
+    cached_markdown_version Int?
+    namespaces              namespaces?             @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects                projects?               @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    label_links             label_links[]
+    label_priorities        label_priorities[]
+    lists                   lists[]
+    resource_label_events   resource_label_events[]
+
+    @@unique([group_id, project_id, title])
+    @@index([project_id])
+    @@index([title])
+    @@index([type, project_id])
+}
+
+model lfs_file_locks {
+    id         Int      @id @default(autoincrement())
+    project_id Int
+    user_id    Int
+    created_at DateTime @db.Timestamp(6)
+    path       String?  @db.VarChar(511)
+    projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, path])
+    @@index([user_id])
+}
+
+model lfs_objects {
+    id         Int       @id @default(autoincrement())
+    oid        String    @unique @db.VarChar
+    size       BigInt
+    created_at DateTime? @db.Timestamp(6)
+    updated_at DateTime? @db.Timestamp(6)
+    file       String?   @db.VarChar
+    file_store Int?
+
+    @@index([file_store])
+}
+
+model lfs_objects_projects {
+    id            Int       @id @default(autoincrement())
+    lfs_object_id Int
+    project_id    Int
+    created_at    DateTime? @db.Timestamp(6)
+    updated_at    DateTime? @db.Timestamp(6)
+
+    @@index([project_id])
+}
+
+model lists {
+    id         Int      @id @default(autoincrement())
+    board_id   Int
+    label_id   Int?
+    list_type  Int      @default(1)
+    position   Int?
+    created_at DateTime @db.Timestamp(6)
+    updated_at DateTime @db.Timestamp(6)
+    boards     boards   @relation(fields: [board_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    labels     labels?  @relation(fields: [label_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([board_id, label_id])
+    @@index([label_id])
+    @@index([list_type])
+}
+
+model members {
+    id                 Int       @id @default(autoincrement())
+    access_level       Int
+    source_id          Int
+    source_type        String    @db.VarChar
+    user_id            Int?
+    notification_level Int
+    type               String?   @db.VarChar
+    created_at         DateTime? @db.Timestamp(6)
+    updated_at         DateTime? @db.Timestamp(6)
+    created_by_id      Int?
+    invite_email       String?   @db.VarChar
+    invite_token       String?   @unique @db.VarChar
+    invite_accepted_at DateTime? @db.Timestamp(6)
+    requested_at       DateTime? @db.Timestamp(6)
+    expires_at         DateTime? @db.Date
+    users              users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([access_level])
+    @@index([requested_at])
+    @@index([source_id, source_type])
+    @@index([user_id])
+}
+
+model merge_request_assignees {
+    id               BigInt         @id @default(autoincrement())
+    user_id          Int
+    merge_request_id Int
+    merge_requests   merge_requests @relation(fields: [merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users            users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([merge_request_id, user_id])
+    @@index([merge_request_id])
+    @@index([user_id])
+}
+
+model merge_request_blocks {
+    id                                                                            BigInt         @id @default(autoincrement())
+    blocking_merge_request_id                                                     Int
+    blocked_merge_request_id                                                      Int
+    created_at                                                                    DateTime       @db.Timestamptz(6)
+    updated_at                                                                    DateTime       @db.Timestamptz(6)
+    merge_requests_merge_request_blocks_blocked_merge_request_idTomerge_requests  merge_requests @relation("merge_request_blocks_blocked_merge_request_idTomerge_requests", fields: [blocked_merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    merge_requests_merge_request_blocks_blocking_merge_request_idTomerge_requests merge_requests @relation("merge_request_blocks_blocking_merge_request_idTomerge_requests", fields: [blocking_merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([blocking_merge_request_id, blocked_merge_request_id])
+    @@index([blocked_merge_request_id])
+}
+
+model merge_request_diff_commits {
+    authored_date         DateTime?           @db.Timestamptz(6)
+    committed_date        DateTime?           @db.Timestamptz(6)
+    merge_request_diff_id Int
+    relative_order        Int
+    sha                   Bytes
+    author_name           String?
+    author_email          String?
+    committer_name        String?
+    committer_email       String?
+    message               String?
+    merge_request_diffs   merge_request_diffs @relation(fields: [merge_request_diff_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([merge_request_diff_id, relative_order])
+    @@index([sha])
+}
+
+model merge_request_diff_files {
+    merge_request_diff_id Int
+    relative_order        Int
+    new_file              Boolean
+    renamed_file          Boolean
+    deleted_file          Boolean
+    too_large             Boolean
+    a_mode                String              @db.VarChar
+    b_mode                String              @db.VarChar
+    new_path              String
+    old_path              String
+    diff                  String?
+    binary                Boolean?
+    external_diff_offset  Int?
+    external_diff_size    Int?
+    merge_request_diffs   merge_request_diffs @relation(fields: [merge_request_diff_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([merge_request_diff_id, relative_order])
+}
+
+model merge_request_diffs {
+    id                                                                              Int                          @id @default(autoincrement())
+    state                                                                           String?                      @db.VarChar
+    merge_request_id                                                                Int
+    created_at                                                                      DateTime?                    @db.Timestamp(6)
+    updated_at                                                                      DateTime?                    @db.Timestamp(6)
+    base_commit_sha                                                                 String?                      @db.VarChar
+    real_size                                                                       String?                      @db.VarChar
+    head_commit_sha                                                                 String?                      @db.VarChar
+    start_commit_sha                                                                String?                      @db.VarChar
+    commits_count                                                                   Int?
+    external_diff                                                                   String?                      @db.VarChar
+    external_diff_store                                                             Int?
+    stored_externally                                                               Boolean?
+    merge_requests_merge_request_diffs_merge_request_idTomerge_requests             merge_requests               @relation("merge_request_diffs_merge_request_idTomerge_requests", fields: [merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    merge_request_diff_commits                                                      merge_request_diff_commits[]
+    merge_request_diff_files                                                        merge_request_diff_files[]
+    merge_requests_merge_request_diffsTomerge_requests_latest_merge_request_diff_id merge_requests[]             @relation("merge_request_diffsTomerge_requests_latest_merge_request_diff_id")
+
+    @@index([merge_request_id, id])
+}
+
+model merge_request_metrics {
+    id                                                     Int            @id @default(autoincrement())
+    merge_request_id                                       Int
+    latest_build_started_at                                DateTime?      @db.Timestamp(6)
+    latest_build_finished_at                               DateTime?      @db.Timestamp(6)
+    first_deployed_to_production_at                        DateTime?      @db.Timestamp(6)
+    merged_at                                              DateTime?      @db.Timestamp(6)
+    created_at                                             DateTime       @db.Timestamp(6)
+    updated_at                                             DateTime       @db.Timestamp(6)
+    pipeline_id                                            Int?
+    merged_by_id                                           Int?
+    latest_closed_by_id                                    Int?
+    latest_closed_at                                       DateTime?      @db.Timestamptz(6)
+    users_merge_request_metrics_latest_closed_by_idTousers users?         @relation("merge_request_metrics_latest_closed_by_idTousers", fields: [latest_closed_by_id], references: [id], onUpdate: NoAction)
+    merge_requests                                         merge_requests @relation(fields: [merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users_merge_request_metrics_merged_by_idTousers        users?         @relation("merge_request_metrics_merged_by_idTousers", fields: [merged_by_id], references: [id], onUpdate: NoAction)
+    ci_pipelines                                           ci_pipelines?  @relation(fields: [pipeline_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([merge_request_id])
+    @@index([first_deployed_to_production_at])
+    @@index([latest_closed_by_id])
+    @@index([merged_by_id])
+    @@index([pipeline_id])
+}
+
+model merge_requests {
+    id                                                                                   Int                             @id @default(autoincrement())
+    target_branch                                                                        String                          @db.VarChar
+    source_branch                                                                        String                          @db.VarChar
+    source_project_id                                                                    Int?
+    author_id                                                                            Int?
+    assignee_id                                                                          Int?
+    title                                                                                String?                         @db.VarChar
+    created_at                                                                           DateTime?                       @db.Timestamp(6)
+    updated_at                                                                           DateTime?                       @db.Timestamp(6)
+    milestone_id                                                                         Int?
+    state                                                                                String                          @default("opened") @db.VarChar
+    merge_status                                                                         String                          @default("unchecked") @db.VarChar
+    target_project_id                                                                    Int
+    iid                                                                                  Int?
+    description                                                                          String?
+    updated_by_id                                                                        Int?
+    merge_error                                                                          String?
+    merge_params                                                                         String?
+    merge_when_pipeline_succeeds                                                         Boolean                         @default(false)
+    merge_user_id                                                                        Int?
+    merge_commit_sha                                                                     String?                         @db.VarChar
+    in_progress_merge_commit_sha                                                         String?                         @db.VarChar
+    lock_version                                                                         Int?
+    title_html                                                                           String?
+    description_html                                                                     String?
+    time_estimate                                                                        Int?
+    cached_markdown_version                                                              Int?
+    last_edited_at                                                                       DateTime?                       @db.Timestamp(6)
+    last_edited_by_id                                                                    Int?
+    head_pipeline_id                                                                     Int?
+    merge_jid                                                                            String?                         @db.VarChar
+    discussion_locked                                                                    Boolean?
+    latest_merge_request_diff_id                                                         Int?
+    rebase_commit_sha                                                                    String?                         @db.VarChar
+    squash                                                                               Boolean                         @default(false)
+    allow_maintainer_to_push                                                             Boolean?
+    state_id                                                                             Int?                            @db.SmallInt
+    users_merge_requests_assignee_idTousers                                              users?                          @relation("merge_requests_assignee_idTousers", fields: [assignee_id], references: [id], onUpdate: NoAction)
+    users_merge_requests_author_idTousers                                                users?                          @relation("merge_requests_author_idTousers", fields: [author_id], references: [id], onUpdate: NoAction)
+    ci_pipelines_ci_pipelinesTomerge_requests_head_pipeline_id                           ci_pipelines?                   @relation("ci_pipelinesTomerge_requests_head_pipeline_id", fields: [head_pipeline_id], references: [id], onUpdate: NoAction)
+    merge_request_diffs_merge_request_diffsTomerge_requests_latest_merge_request_diff_id merge_request_diffs?            @relation("merge_request_diffsTomerge_requests_latest_merge_request_diff_id", fields: [latest_merge_request_diff_id], references: [id], onUpdate: NoAction)
+    users_merge_requests_merge_user_idTousers                                            users?                          @relation("merge_requests_merge_user_idTousers", fields: [merge_user_id], references: [id], onUpdate: NoAction)
+    milestones                                                                           milestones?                     @relation(fields: [milestone_id], references: [id], onUpdate: NoAction)
+    projects_merge_requests_source_project_idToprojects                                  projects?                       @relation("merge_requests_source_project_idToprojects", fields: [source_project_id], references: [id], onUpdate: NoAction)
+    projects_merge_requests_target_project_idToprojects                                  projects                        @relation("merge_requests_target_project_idToprojects", fields: [target_project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users_merge_requests_updated_by_idTousers                                            users?                          @relation("merge_requests_updated_by_idTousers", fields: [updated_by_id], references: [id], onUpdate: NoAction)
+    ci_pipelines_ci_pipelines_merge_request_idTomerge_requests                           ci_pipelines[]                  @relation("ci_pipelines_merge_request_idTomerge_requests")
+    merge_request_assignees                                                              merge_request_assignees[]
+    merge_request_blocks_merge_request_blocks_blocked_merge_request_idTomerge_requests   merge_request_blocks[]          @relation("merge_request_blocks_blocked_merge_request_idTomerge_requests")
+    merge_request_blocks_merge_request_blocks_blocking_merge_request_idTomerge_requests  merge_request_blocks[]          @relation("merge_request_blocks_blocking_merge_request_idTomerge_requests")
+    merge_request_diffs_merge_request_diffs_merge_request_idTomerge_requests             merge_request_diffs[]           @relation("merge_request_diffs_merge_request_idTomerge_requests")
+    merge_request_metrics                                                                merge_request_metrics[]
+    merge_requests_closing_issues                                                        merge_requests_closing_issues[]
+    merge_trains                                                                         merge_trains?
+    resource_label_events                                                                resource_label_events[]
+    timelogs                                                                             timelogs[]
+
+    @@unique([target_project_id, iid])
+    @@index([assignee_id])
+    @@index([author_id])
+    @@index([created_at])
+    @@index([description])
+    @@index([head_pipeline_id])
+    @@index([latest_merge_request_diff_id])
+    @@index([milestone_id])
+    @@index([source_branch])
+    @@index([source_project_id, source_branch])
+    @@index([target_branch])
+    @@index([title])
+    @@index([target_project_id, merge_commit_sha, id])
+}
+
+model merge_requests_closing_issues {
+    id               Int            @id @default(autoincrement())
+    merge_request_id Int
+    issue_id         Int
+    created_at       DateTime       @db.Timestamp(6)
+    updated_at       DateTime       @db.Timestamp(6)
+    issues           issues         @relation(fields: [issue_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    merge_requests   merge_requests @relation(fields: [merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([issue_id])
+    @@index([merge_request_id])
+}
+
+model merge_trains {
+    id                BigInt         @id @default(autoincrement())
+    merge_request_id  Int            @unique
+    user_id           Int
+    pipeline_id       Int?
+    created_at        DateTime       @db.Timestamptz(6)
+    updated_at        DateTime       @db.Timestamptz(6)
+    target_project_id Int
+    target_branch     String
+    merge_requests    merge_requests @relation(fields: [merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    ci_pipelines      ci_pipelines?  @relation(fields: [pipeline_id], references: [id], onUpdate: NoAction)
+    projects          projects       @relation(fields: [target_project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users             users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([pipeline_id])
+    @@index([target_project_id])
+    @@index([user_id])
+}
+
+model milestones {
+    id                      Int              @id @default(autoincrement())
+    title                   String           @db.VarChar
+    project_id              Int?
+    description             String?
+    due_date                DateTime?        @db.Date
+    created_at              DateTime?        @db.Timestamp(6)
+    updated_at              DateTime?        @db.Timestamp(6)
+    state                   String?          @db.VarChar
+    iid                     Int?
+    title_html              String?
+    description_html        String?
+    start_date              DateTime?        @db.Date
+    cached_markdown_version Int?
+    group_id                Int?
+    namespaces              namespaces?      @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects                projects?        @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    issues                  issues[]
+    merge_requests          merge_requests[]
+
+    @@unique([project_id, iid])
+    @@index([description])
+    @@index([due_date])
+    @@index([group_id])
+    @@index([title])
+}
+
+model namespaces {
+    id                                 Int                                  @id @default(autoincrement())
+    name                               String                               @db.VarChar
+    path                               String                               @db.VarChar
+    owner_id                           Int?
+    created_at                         DateTime?                            @db.Timestamp(6)
+    updated_at                         DateTime?                            @db.Timestamp(6)
+    type                               String?                              @db.VarChar
+    description                        String                               @default("") @db.VarChar
+    avatar                             String?                              @db.VarChar
+    share_with_group_lock              Boolean?                             @default(false)
+    visibility_level                   Int                                  @default(20)
+    request_access_enabled             Boolean                              @default(false)
+    description_html                   String?
+    lfs_enabled                        Boolean?
+    parent_id                          Int?
+    require_two_factor_authentication  Boolean                              @default(false)
+    two_factor_grace_period            Int                                  @default(48)
+    cached_markdown_version            Int?
+    runners_token                      String?                              @unique @db.VarChar
+    runners_token_encrypted            String?                              @unique @db.VarChar
+    project_creation_level             Int?
+    auto_devops_enabled                Boolean?
+    last_ci_minutes_notification_at    DateTime?                            @db.Timestamptz(6)
+    badges                             badges[]
+    board_group_recent_visits          board_group_recent_visits[]
+    boards                             boards[]
+    chat_teams                         chat_teams?
+    ci_group_variables                 ci_group_variables[]
+    ci_runner_namespaces               ci_runner_namespaces[]
+    cluster_groups                     cluster_groups[]
+    group_custom_attributes            group_custom_attributes[]
+    internal_ids                       internal_ids[]
+    labels                             labels[]
+    milestones                         milestones[]
+    protected_tag_create_access_levels protected_tag_create_access_levels[]
+    todos                              todos[]
+
+    @@unique([name, parent_id])
+    @@unique([parent_id, id])
+    @@index([created_at])
+    @@index([name])
+    @@index([owner_id])
+    @@index([path])
+    @@index([require_two_factor_authentication])
+    @@index([type])
+}
+
+model note_diff_files {
+    id           Int     @id @default(autoincrement())
+    diff_note_id Int     @unique
+    diff         String
+    new_file     Boolean
+    renamed_file Boolean
+    deleted_file Boolean
+    a_mode       String  @db.VarChar
+    b_mode       String  @db.VarChar
+    new_path     String
+    old_path     String
+    notes        notes   @relation(fields: [diff_note_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model notes {
+    id                      Int                   @id @default(autoincrement())
+    note                    String?
+    noteable_type           String?               @db.VarChar
+    author_id               Int?
+    created_at              DateTime?             @db.Timestamp(6)
+    updated_at              DateTime?             @db.Timestamp(6)
+    project_id              Int?
+    attachment              String?               @db.VarChar
+    line_code               String?               @db.VarChar
+    commit_id               String?               @db.VarChar
+    noteable_id             Int?
+    system                  Boolean               @default(false)
+    st_diff                 String?
+    updated_by_id           Int?
+    type                    String?               @db.VarChar
+    position                String?
+    original_position       String?
+    resolved_at             DateTime?             @db.Timestamp(6)
+    resolved_by_id          Int?
+    discussion_id           String?               @db.VarChar
+    note_html               String?
+    cached_markdown_version Int?
+    change_position         String?
+    resolved_by_push        Boolean?
+    projects                projects?             @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    note_diff_files         note_diff_files?
+    suggestions             suggestions[]
+    system_note_metadata    system_note_metadata?
+    todos                   todos[]
+
+    @@index([author_id])
+    @@index([commit_id])
+    @@index([created_at])
+    @@index([discussion_id])
+    @@index([line_code])
+    @@index([note])
+    @@index([noteable_id, noteable_type])
+    @@index([noteable_type])
+    @@index([project_id, noteable_type])
+}
+
+model notification_settings {
+    id                     Int      @id @default(autoincrement())
+    user_id                Int
+    source_id              Int?
+    source_type            String?  @db.VarChar
+    level                  Int      @default(0)
+    created_at             DateTime @db.Timestamp(6)
+    updated_at             DateTime @db.Timestamp(6)
+    new_note               Boolean?
+    new_issue              Boolean?
+    reopen_issue           Boolean?
+    close_issue            Boolean?
+    reassign_issue         Boolean?
+    new_merge_request      Boolean?
+    reopen_merge_request   Boolean?
+    close_merge_request    Boolean?
+    reassign_merge_request Boolean?
+    merge_merge_request    Boolean?
+    failed_pipeline        Boolean?
+    success_pipeline       Boolean?
+    push_to_merge_request  Boolean?
+    issue_due              Boolean?
+    notification_email     String?  @db.VarChar
+    users                  users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([user_id, source_id, source_type])
+    @@index([source_id, source_type])
+    @@index([user_id])
+}
+
+model oauth_access_grants {
+    id                    Int                     @id @default(autoincrement())
+    resource_owner_id     Int
+    application_id        Int
+    token                 String                  @unique @db.VarChar
+    expires_in            Int
+    redirect_uri          String
+    created_at            DateTime                @db.Timestamp(6)
+    revoked_at            DateTime?               @db.Timestamp(6)
+    scopes                String?                 @db.VarChar
+    oauth_openid_requests oauth_openid_requests[]
+}
+
+model oauth_access_tokens {
+    id                Int       @id @default(autoincrement())
+    resource_owner_id Int?
+    application_id    Int?
+    token             String    @unique @db.VarChar
+    refresh_token     String?   @unique @db.VarChar
+    expires_in        Int?
+    revoked_at        DateTime? @db.Timestamp(6)
+    created_at        DateTime  @db.Timestamp(6)
+    scopes            String?   @db.VarChar
+
+    @@index([resource_owner_id])
+}
+
+model oauth_applications {
+    id                            Int                             @id @default(autoincrement())
+    name                          String                          @db.VarChar
+    uid                           String                          @unique @db.VarChar
+    secret                        String                          @db.VarChar
+    redirect_uri                  String
+    scopes                        String                          @default("") @db.VarChar
+    created_at                    DateTime?                       @db.Timestamp(6)
+    updated_at                    DateTime?                       @db.Timestamp(6)
+    owner_id                      Int?
+    owner_type                    String?                         @db.VarChar
+    trusted                       Boolean                         @default(false)
+    clusters_applications_jupyter clusters_applications_jupyter[]
+
+    @@index([owner_id, owner_type])
+}
+
+model oauth_openid_requests {
+    id                  Int                 @id @default(autoincrement())
+    access_grant_id     Int
+    nonce               String              @db.VarChar
+    oauth_access_grants oauth_access_grants @relation(fields: [access_grant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@index([access_grant_id])
+}
+
+model pages_domain_acme_orders {
+    id                       BigInt        @id @default(autoincrement())
+    pages_domain_id          Int
+    expires_at               DateTime      @db.Timestamptz(6)
+    created_at               DateTime      @db.Timestamptz(6)
+    updated_at               DateTime      @db.Timestamptz(6)
+    url                      String        @db.VarChar
+    challenge_token          String        @db.VarChar
+    challenge_file_content   String
+    encrypted_private_key    String
+    encrypted_private_key_iv String
+    pages_domains            pages_domains @relation(fields: [pages_domain_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([challenge_token])
+    @@index([pages_domain_id])
+}
+
+model pages_domains {
+    id                           Int                        @id @default(autoincrement())
+    project_id                   Int?
+    certificate                  String?
+    encrypted_key                String?
+    encrypted_key_iv             String?                    @db.VarChar
+    encrypted_key_salt           String?                    @db.VarChar
+    domain                       String?                    @unique @db.VarChar
+    verified_at                  DateTime?                  @db.Timestamptz(6)
+    verification_code            String                     @db.VarChar
+    enabled_until                DateTime?                  @db.Timestamptz(6)
+    remove_at                    DateTime?                  @db.Timestamptz(6)
+    auto_ssl_enabled             Boolean                    @default(false)
+    certificate_valid_not_before DateTime?                  @db.Timestamptz(6)
+    certificate_valid_not_after  DateTime?                  @db.Timestamptz(6)
+    projects                     projects?                  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    pages_domain_acme_orders     pages_domain_acme_orders[]
+
+    @@index([project_id])
+    @@index([project_id, enabled_until])
+    @@index([remove_at])
+    @@index([verified_at])
+    @@index([verified_at, enabled_until])
+}
+
+model personal_access_tokens {
+    id            Int       @id @default(autoincrement())
+    user_id       Int
+    name          String    @db.VarChar
+    revoked       Boolean?  @default(false)
+    expires_at    DateTime? @db.Date
+    created_at    DateTime  @db.Timestamp(6)
+    updated_at    DateTime  @db.Timestamp(6)
+    scopes        String    @default("--- []\n") @db.VarChar
+    impersonation Boolean   @default(false)
+    token_digest  String?   @unique @db.VarChar
+    users         users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@index([user_id])
+}
+
+model pool_repositories {
+    id                                                      BigInt     @id @default(autoincrement())
+    shard_id                                                Int
+    disk_path                                               String?    @unique @db.VarChar
+    state                                                   String?    @db.VarChar
+    source_project_id                                       Int?       @unique
+    shards                                                  shards     @relation(fields: [shard_id], references: [id], onUpdate: NoAction)
+    projects_pool_repositories_source_project_idToprojects  projects?  @relation("pool_repositories_source_project_idToprojects", fields: [source_project_id], references: [id], onUpdate: NoAction)
+    projects_pool_repositoriesToprojects_pool_repository_id projects[] @relation("pool_repositoriesToprojects_pool_repository_id")
+
+    @@index([shard_id])
+}
+
+model programming_languages {
+    id         Int      @id @default(autoincrement())
+    name       String   @unique @db.VarChar
+    color      String   @db.VarChar
+    created_at DateTime @db.Timestamptz(6)
+}
+
+model project_authorizations {
+    user_id      Int
+    project_id   Int
+    access_level Int
+    projects     projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users        users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([user_id, project_id, access_level])
+    @@index([project_id])
+}
+
+model project_auto_devops {
+    id              Int      @id @default(autoincrement())
+    project_id      Int      @unique
+    created_at      DateTime @db.Timestamptz(6)
+    updated_at      DateTime @db.Timestamptz(6)
+    enabled         Boolean?
+    deploy_strategy Int      @default(0)
+    projects        projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model project_ci_cd_settings {
+    id                      Int      @id @default(autoincrement())
+    project_id              Int      @unique
+    group_runners_enabled   Boolean  @default(true)
+    merge_pipelines_enabled Boolean?
+    merge_trains_enabled    Boolean  @default(false)
+    default_git_depth       Int?
+    projects                projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model project_custom_attributes {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @db.Timestamptz(6)
+    updated_at DateTime @db.Timestamptz(6)
+    project_id Int
+    key        String   @db.VarChar
+    value      String   @db.VarChar
+    projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, key])
+    @@index([key, value])
+}
+
+model project_daily_statistics {
+    id          BigInt    @id @default(autoincrement())
+    project_id  Int
+    fetch_count Int
+    date        DateTime? @db.Date
+    projects    projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, date])
+}
+
+model project_deploy_tokens {
+    id              Int           @id @default(autoincrement())
+    project_id      Int
+    deploy_token_id Int
+    created_at      DateTime      @db.Timestamptz(6)
+    deploy_tokens   deploy_tokens @relation(fields: [deploy_token_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects        projects      @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, deploy_token_id])
+    @@index([deploy_token_id])
+}
+
+model project_error_tracking_settings {
+    project_id         Int      @id
+    enabled            Boolean  @default(false)
+    api_url            String?  @db.VarChar
+    encrypted_token    String?  @db.VarChar
+    encrypted_token_iv String?  @db.VarChar
+    project_name       String?  @db.VarChar
+    organization_name  String?  @db.VarChar
+    projects           projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model project_features {
+    id                          Int       @id @default(autoincrement())
+    project_id                  Int       @unique
+    merge_requests_access_level Int?
+    issues_access_level         Int?
+    wiki_access_level           Int?
+    snippets_access_level       Int       @default(20)
+    builds_access_level         Int?
+    created_at                  DateTime? @db.Timestamp(6)
+    updated_at                  DateTime? @db.Timestamp(6)
+    repository_access_level     Int       @default(20)
+    pages_access_level          Int       @default(20)
+    projects                    projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model project_group_links {
+    id           Int       @id @default(autoincrement())
+    project_id   Int
+    group_id     Int
+    created_at   DateTime? @db.Timestamp(6)
+    updated_at   DateTime? @db.Timestamp(6)
+    group_access Int       @default(30)
+    expires_at   DateTime? @db.Date
+    projects     projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([group_id])
+    @@index([project_id])
+}
+
+model project_import_data {
+    id                         Int       @id @default(autoincrement())
+    project_id                 Int?
+    data                       String?
+    encrypted_credentials      String?
+    encrypted_credentials_iv   String?   @db.VarChar
+    encrypted_credentials_salt String?   @db.VarChar
+    projects                   projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([project_id])
+}
+
+model project_metrics_settings {
+    project_id             Int      @id
+    external_dashboard_url String   @db.VarChar
+    projects               projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model project_mirror_data {
+    id         Int      @id @default(autoincrement())
+    project_id Int      @unique
+    status     String?  @db.VarChar
+    jid        String?  @db.VarChar
+    last_error String?
+    projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([jid])
+    @@index([status])
+}
+
+model project_repositories {
+    id         BigInt   @id @default(autoincrement())
+    shard_id   Int
+    disk_path  String   @unique @db.VarChar
+    project_id Int      @unique
+    projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    shards     shards   @relation(fields: [shard_id], references: [id], onUpdate: NoAction)
+
+    @@index([shard_id])
+}
+
+model project_statistics {
+    id                   Int      @id @default(autoincrement())
+    project_id           Int      @unique
+    namespace_id         Int
+    commit_count         BigInt   @default(0)
+    storage_size         BigInt   @default(0)
+    repository_size      BigInt   @default(0)
+    lfs_objects_size     BigInt   @default(0)
+    build_artifacts_size BigInt   @default(0)
+    packages_size        BigInt   @default(0)
+    wiki_size            BigInt?
+    projects             projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([namespace_id])
+}
+
+model projects {
+    id                                                                         Int                              @id @default(autoincrement())
+    name                                                                       String?                          @db.VarChar
+    path                                                                       String?                          @db.VarChar
+    description                                                                String?
+    created_at                                                                 DateTime?                        @db.Timestamp(6)
+    updated_at                                                                 DateTime?                        @db.Timestamp(6)
+    creator_id                                                                 Int?
+    namespace_id                                                               Int
+    last_activity_at                                                           DateTime?                        @db.Timestamp(6)
+    import_url                                                                 String?                          @db.VarChar
+    visibility_level                                                           Int                              @default(0)
+    archived                                                                   Boolean                          @default(false)
+    avatar                                                                     String?                          @db.VarChar
+    import_status                                                              String?                          @db.VarChar
+    star_count                                                                 Int                              @default(0)
+    import_type                                                                String?                          @db.VarChar
+    import_source                                                              String?                          @db.VarChar
+    import_error                                                               String?
+    shared_runners_enabled                                                     Boolean                          @default(true)
+    runners_token                                                              String?                          @db.VarChar
+    build_coverage_regex                                                       String?                          @db.VarChar
+    build_allow_git_fetch                                                      Boolean                          @default(true)
+    build_timeout                                                              Int                              @default(3600)
+    pending_delete                                                             Boolean?                         @default(false)
+    public_builds                                                              Boolean                          @default(true)
+    last_repository_check_failed                                               Boolean?
+    last_repository_check_at                                                   DateTime?                        @db.Timestamp(6)
+    container_registry_enabled                                                 Boolean?
+    only_allow_merge_if_pipeline_succeeds                                      Boolean                          @default(false)
+    has_external_issue_tracker                                                 Boolean?
+    repository_storage                                                         String                           @default("default") @db.VarChar
+    request_access_enabled                                                     Boolean                          @default(false)
+    has_external_wiki                                                          Boolean?
+    ci_config_path                                                             String?                          @db.VarChar
+    lfs_enabled                                                                Boolean?
+    description_html                                                           String?
+    only_allow_merge_if_all_discussions_are_resolved                           Boolean?
+    printing_merge_request_link_enabled                                        Boolean                          @default(true)
+    auto_cancel_pending_pipelines                                              Int                              @default(1)
+    import_jid                                                                 String?                          @db.VarChar
+    cached_markdown_version                                                    Int?
+    delete_error                                                               String?
+    last_repository_updated_at                                                 DateTime?                        @db.Timestamp(6)
+    storage_version                                                            Int?                             @db.SmallInt
+    resolve_outdated_diff_discussions                                          Boolean?
+    repository_read_only                                                       Boolean?
+    merge_requests_ff_only_enabled                                             Boolean?                         @default(false)
+    merge_requests_rebase_enabled                                              Boolean                          @default(false)
+    jobs_cache_index                                                           Int?
+    pages_https_only                                                           Boolean?                         @default(true)
+    remote_mirror_available_overridden                                         Boolean?
+    pool_repository_id                                                         BigInt?
+    runners_token_encrypted                                                    String?                          @db.VarChar
+    bfg_object_map                                                             String?                          @db.VarChar
+    detected_repository_languages                                              Boolean?
+    external_authorization_classification_label                                String?                          @db.VarChar
+    pool_repositories_pool_repositoriesToprojects_pool_repository_id           pool_repositories?               @relation("pool_repositoriesToprojects_pool_repository_id", fields: [pool_repository_id], references: [id], onUpdate: NoAction)
+    badges                                                                     badges[]
+    board_project_recent_visits                                                board_project_recent_visits[]
+    boards                                                                     boards[]
+    ci_build_trace_section_names                                               ci_build_trace_section_names[]
+    ci_build_trace_sections                                                    ci_build_trace_sections[]
+    ci_builds                                                                  ci_builds[]
+    ci_builds_metadata                                                         ci_builds_metadata[]
+    ci_job_artifacts                                                           ci_job_artifacts[]
+    ci_pipeline_schedules                                                      ci_pipeline_schedules[]
+    ci_pipelines                                                               ci_pipelines[]
+    ci_runner_projects                                                         ci_runner_projects[]
+    ci_stages                                                                  ci_stages[]
+    ci_triggers                                                                ci_triggers[]
+    ci_variables                                                               ci_variables[]
+    cluster_projects                                                           cluster_projects[]
+    clusters_kubernetes_namespaces                                             clusters_kubernetes_namespaces[]
+    container_repositories                                                     container_repositories[]
+    deploy_keys_projects                                                       deploy_keys_projects[]
+    deployments                                                                deployments[]
+    environments                                                               environments[]
+    events                                                                     events[]
+    fork_network_members_fork_network_members_forked_from_project_idToprojects fork_network_members[]           @relation("fork_network_members_forked_from_project_idToprojects")
+    fork_network_members_fork_network_members_project_idToprojects             fork_network_members?            @relation("fork_network_members_project_idToprojects")
+    fork_networks                                                              fork_networks?
+    forked_project_links                                                       forked_project_links?
+    gpg_signatures                                                             gpg_signatures[]
+    import_export_uploads                                                      import_export_uploads[]
+    internal_ids                                                               internal_ids[]
+    issues                                                                     issues[]
+    label_priorities                                                           label_priorities[]
+    labels                                                                     labels[]
+    lfs_file_locks                                                             lfs_file_locks[]
+    merge_requests_merge_requests_source_project_idToprojects                  merge_requests[]                 @relation("merge_requests_source_project_idToprojects")
+    merge_requests_merge_requests_target_project_idToprojects                  merge_requests[]                 @relation("merge_requests_target_project_idToprojects")
+    merge_trains                                                               merge_trains[]
+    milestones                                                                 milestones[]
+    notes                                                                      notes[]
+    pages_domains                                                              pages_domains[]
+    pool_repositories_pool_repositories_source_project_idToprojects            pool_repositories?               @relation("pool_repositories_source_project_idToprojects")
+    project_authorizations                                                     project_authorizations[]
+    project_auto_devops                                                        project_auto_devops?
+    project_ci_cd_settings                                                     project_ci_cd_settings?
+    project_custom_attributes                                                  project_custom_attributes[]
+    project_daily_statistics                                                   project_daily_statistics[]
+    project_deploy_tokens                                                      project_deploy_tokens[]
+    project_error_tracking_settings                                            project_error_tracking_settings?
+    project_features                                                           project_features?
+    project_group_links                                                        project_group_links[]
+    project_import_data                                                        project_import_data[]
+    project_metrics_settings                                                   project_metrics_settings?
+    project_mirror_data                                                        project_mirror_data?
+    project_repositories                                                       project_repositories?
+    project_statistics                                                         project_statistics?
+    prometheus_metrics                                                         prometheus_metrics[]
+    protected_branches                                                         protected_branches[]
+    protected_tags                                                             protected_tags[]
+    releases                                                                   releases[]
+    remote_mirrors                                                             remote_mirrors[]
+    repository_languages                                                       repository_languages[]
+    services                                                                   services[]
+    snippets                                                                   snippets[]
+    subscriptions                                                              subscriptions[]
+    todos                                                                      todos[]
+    trending_projects                                                          trending_projects?
+    user_interacted_projects                                                   user_interacted_projects[]
+    users_star_projects                                                        users_star_projects[]
+    web_hooks                                                                  web_hooks[]
+
+    @@index([created_at])
+    @@index([creator_id])
+    @@index([description])
+    @@index([last_activity_at])
+    @@index([last_repository_check_failed])
+    @@index([last_repository_updated_at])
+    @@index([name])
+    @@index([namespace_id])
+    @@index([path])
+    @@index([pending_delete])
+    @@index([repository_storage])
+    @@index([runners_token])
+    @@index([runners_token_encrypted])
+    @@index([star_count])
+    @@index([visibility_level])
+}
+
+model prometheus_metrics {
+    id         Int       @id @default(autoincrement())
+    project_id Int?
+    title      String    @db.VarChar
+    query      String    @db.VarChar
+    y_label    String?   @db.VarChar
+    unit       String?   @db.VarChar
+    legend     String?   @db.VarChar
+    group      Int
+    created_at DateTime  @db.Timestamptz(6)
+    updated_at DateTime  @db.Timestamptz(6)
+    common     Boolean   @default(false)
+    identifier String?   @unique @db.VarChar
+    projects   projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([common])
+    @@index([group])
+    @@index([project_id])
+}
+
+model protected_branch_merge_access_levels {
+    id                  Int                @id @default(autoincrement())
+    protected_branch_id Int
+    access_level        Int                @default(40)
+    created_at          DateTime           @db.Timestamp(6)
+    updated_at          DateTime           @db.Timestamp(6)
+    protected_branches  protected_branches @relation(fields: [protected_branch_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([protected_branch_id])
+}
+
+model protected_branch_push_access_levels {
+    id                  Int                @id @default(autoincrement())
+    protected_branch_id Int
+    access_level        Int                @default(40)
+    created_at          DateTime           @db.Timestamp(6)
+    updated_at          DateTime           @db.Timestamp(6)
+    protected_branches  protected_branches @relation(fields: [protected_branch_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([protected_branch_id])
+}
+
+model protected_branches {
+    id                                   Int                                    @id @default(autoincrement())
+    project_id                           Int
+    name                                 String                                 @db.VarChar
+    created_at                           DateTime?                              @db.Timestamp(6)
+    updated_at                           DateTime?                              @db.Timestamp(6)
+    projects                             projects                               @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    protected_branch_merge_access_levels protected_branch_merge_access_levels[]
+    protected_branch_push_access_levels  protected_branch_push_access_levels[]
+
+    @@index([project_id])
+}
+
+model protected_tag_create_access_levels {
+    id               Int            @id @default(autoincrement())
+    protected_tag_id Int
+    access_level     Int?           @default(40)
+    user_id          Int?
+    group_id         Int?
+    created_at       DateTime       @db.Timestamp(6)
+    updated_at       DateTime       @db.Timestamp(6)
+    namespaces       namespaces?    @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    protected_tags   protected_tags @relation(fields: [protected_tag_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users            users?         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@index([protected_tag_id])
+    @@index([group_id])
+    @@index([user_id])
+}
+
+model protected_tags {
+    id                                 Int                                  @id @default(autoincrement())
+    project_id                         Int
+    name                               String                               @db.VarChar
+    created_at                         DateTime                             @db.Timestamp(6)
+    updated_at                         DateTime                             @db.Timestamp(6)
+    projects                           projects                             @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    protected_tag_create_access_levels protected_tag_create_access_levels[]
+
+    @@unique([project_id, name])
+    @@index([project_id])
+}
+
+model push_event_payloads {
+    commit_count BigInt
+    event_id     Int     @unique
+    action       Int     @db.SmallInt
+    ref_type     Int     @db.SmallInt
+    commit_from  Bytes?
+    commit_to    Bytes?
+    ref          String?
+    commit_title String? @db.VarChar(70)
+    events       events  @relation(fields: [event_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model redirect_routes {
+    id          Int      @id @default(autoincrement())
+    source_id   Int
+    source_type String   @db.VarChar
+    path        String   @unique @db.VarChar
+    created_at  DateTime @db.Timestamp(6)
+    updated_at  DateTime @db.Timestamp(6)
+
+    @@index([source_type, source_id])
+}
+
+model release_links {
+    id         BigInt   @id @default(autoincrement())
+    release_id Int
+    url        String   @db.VarChar
+    name       String   @db.VarChar
+    created_at DateTime @db.Timestamptz(6)
+    updated_at DateTime @db.Timestamptz(6)
+    releases   releases @relation(fields: [release_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([release_id, name])
+    @@unique([release_id, url])
+}
+
+model releases {
+    id                      Int             @id @default(autoincrement())
+    tag                     String?         @db.VarChar
+    description             String?
+    project_id              Int?
+    created_at              DateTime?       @db.Timestamp(6)
+    updated_at              DateTime?       @db.Timestamp(6)
+    description_html        String?
+    cached_markdown_version Int?
+    author_id               Int?
+    name                    String?         @db.VarChar
+    sha                     String?         @db.VarChar
+    users                   users?          @relation(fields: [author_id], references: [id], onUpdate: NoAction)
+    projects                projects?       @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    release_links           release_links[]
+
+    @@index([author_id])
+    @@index([project_id])
+    @@index([project_id, tag])
+}
+
+model remote_mirrors {
+    id                         Int       @id @default(autoincrement())
+    project_id                 Int?
+    url                        String?   @db.VarChar
+    enabled                    Boolean?  @default(false)
+    update_status              String?   @db.VarChar
+    last_update_at             DateTime? @db.Timestamp(6)
+    last_successful_update_at  DateTime? @db.Timestamp(6)
+    last_update_started_at     DateTime? @db.Timestamp(6)
+    last_error                 String?   @db.VarChar
+    only_protected_branches    Boolean   @default(false)
+    remote_name                String?   @db.VarChar
+    encrypted_credentials      String?
+    encrypted_credentials_iv   String?   @db.VarChar
+    encrypted_credentials_salt String?   @db.VarChar
+    created_at                 DateTime  @db.Timestamp(6)
+    updated_at                 DateTime  @db.Timestamp(6)
+    error_notification_sent    Boolean?
+    projects                   projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([last_successful_update_at])
+    @@index([project_id])
+}
+
+model repository_languages {
+    project_id              Int
+    programming_language_id Int
+    share                   Float
+    projects                projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, programming_language_id])
+}
+
+model resource_label_events {
+    id                      BigInt          @id @default(autoincrement())
+    action                  Int
+    issue_id                Int?
+    merge_request_id        Int?
+    label_id                Int?
+    user_id                 Int?
+    created_at              DateTime        @db.Timestamptz(6)
+    cached_markdown_version Int?
+    reference               String?
+    reference_html          String?
+    issues                  issues?         @relation(fields: [issue_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    labels                  labels?         @relation(fields: [label_id], references: [id], onUpdate: NoAction)
+    merge_requests          merge_requests? @relation(fields: [merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users                   users?          @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+
+    @@index([issue_id])
+    @@index([label_id])
+    @@index([merge_request_id])
+    @@index([user_id])
+}
+
+model routes {
+    id          Int       @id @default(autoincrement())
+    source_id   Int
+    source_type String    @db.VarChar
+    path        String    @unique @db.VarChar
+    created_at  DateTime? @db.Timestamp(6)
+    updated_at  DateTime? @db.Timestamp(6)
+    name        String?   @db.VarChar
+
+    @@unique([source_type, source_id])
+    @@index([path])
+}
+
+model schema_migrations {
+    version String @id @db.VarChar
+}
+
+model sent_notifications {
+    id                        Int     @id @default(autoincrement())
+    project_id                Int?
+    noteable_id               Int?
+    noteable_type             String? @db.VarChar
+    recipient_id              Int?
+    commit_id                 String? @db.VarChar
+    reply_key                 String  @unique @db.VarChar
+    line_code                 String? @db.VarChar
+    note_type                 String? @db.VarChar
+    position                  String?
+    in_reply_to_discussion_id String? @db.VarChar
+}
+
+model services {
+    id                         Int       @id @default(autoincrement())
+    type                       String?   @db.VarChar
+    title                      String?   @db.VarChar
+    project_id                 Int?
+    created_at                 DateTime? @db.Timestamp(6)
+    updated_at                 DateTime? @db.Timestamp(6)
+    active                     Boolean   @default(false)
+    properties                 String?
+    template                   Boolean?  @default(false)
+    push_events                Boolean?  @default(true)
+    issues_events              Boolean?  @default(true)
+    merge_requests_events      Boolean?  @default(true)
+    tag_push_events            Boolean?  @default(true)
+    note_events                Boolean   @default(true)
+    category                   String    @default("common") @db.VarChar
+    default                    Boolean?  @default(false)
+    wiki_page_events           Boolean?  @default(true)
+    pipeline_events            Boolean   @default(false)
+    confidential_issues_events Boolean   @default(true)
+    commit_events              Boolean   @default(true)
+    job_events                 Boolean   @default(false)
+    confidential_note_events   Boolean?  @default(true)
+    deployment_events          Boolean   @default(false)
+    projects                   projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([project_id])
+    @@index([template])
+    @@index([type])
+}
+
+model shards {
+    id                   Int                    @id @default(autoincrement())
+    name                 String                 @unique @db.VarChar
+    pool_repositories    pool_repositories[]
+    project_repositories project_repositories[]
+}
+
+model snippets {
+    id                      Int       @id @default(autoincrement())
+    title                   String?   @db.VarChar
+    content                 String?
+    author_id               Int
+    project_id              Int?
+    created_at              DateTime? @db.Timestamp(6)
+    updated_at              DateTime? @db.Timestamp(6)
+    file_name               String?   @db.VarChar
+    type                    String?   @db.VarChar
+    visibility_level        Int       @default(0)
+    title_html              String?
+    content_html            String?
+    cached_markdown_version Int?
+    description             String?
+    description_html        String?
+    projects                projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([author_id])
+    @@index([file_name])
+    @@index([project_id])
+    @@index([title])
+    @@index([updated_at])
+    @@index([visibility_level])
+}
+
+model spam_logs {
+    id                 Int      @id @default(autoincrement())
+    user_id            Int?
+    source_ip          String?  @db.VarChar
+    user_agent         String?  @db.VarChar
+    via_api            Boolean?
+    noteable_type      String?  @db.VarChar
+    title              String?  @db.VarChar
+    description        String?
+    created_at         DateTime @db.Timestamp(6)
+    updated_at         DateTime @db.Timestamp(6)
+    submitted_as_ham   Boolean  @default(false)
+    recaptcha_verified Boolean  @default(false)
+}
+
+model subscriptions {
+    id                Int       @id @default(autoincrement())
+    user_id           Int?
+    subscribable_id   Int?
+    subscribable_type String?   @db.VarChar
+    subscribed        Boolean?
+    created_at        DateTime? @db.Timestamp(6)
+    updated_at        DateTime? @db.Timestamp(6)
+    project_id        Int?
+    projects          projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([subscribable_id, subscribable_type, user_id, project_id])
+    @@index([project_id])
+}
+
+model suggestions {
+    id             BigInt  @id @default(autoincrement())
+    note_id        Int
+    relative_order Int     @db.SmallInt
+    applied        Boolean @default(false)
+    commit_id      String? @db.VarChar
+    from_content   String
+    to_content     String
+    lines_above    Int     @default(0)
+    lines_below    Int     @default(0)
+    outdated       Boolean @default(false)
+    notes          notes   @relation(fields: [note_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([note_id, relative_order])
+}
+
+model system_note_metadata {
+    id           Int      @id @default(autoincrement())
+    note_id      Int      @unique
+    commit_count Int?
+    action       String?  @db.VarChar
+    created_at   DateTime @db.Timestamp(6)
+    updated_at   DateTime @db.Timestamp(6)
+    notes        notes    @relation(fields: [note_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model taggings {
+    id            Int       @id @default(autoincrement())
+    tag_id        Int?
+    taggable_id   Int?
+    taggable_type String?   @db.VarChar
+    tagger_id     Int?
+    tagger_type   String?   @db.VarChar
+    context       String?   @db.VarChar
+    created_at    DateTime? @db.Timestamp(6)
+
+    @@unique([tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type])
+    @@index([tag_id])
+    @@index([taggable_id, taggable_type])
+    @@index([taggable_id, taggable_type, context])
+}
+
+model tags {
+    id             Int     @id @default(autoincrement())
+    name           String? @unique @db.VarChar
+    taggings_count Int?    @default(0)
+
+    @@index([name])
+}
+
+model term_agreements {
+    id                        Int                       @id @default(autoincrement())
+    term_id                   Int
+    user_id                   Int
+    accepted                  Boolean                   @default(false)
+    created_at                DateTime                  @db.Timestamptz(6)
+    updated_at                DateTime                  @db.Timestamptz(6)
+    application_setting_terms application_setting_terms @relation(fields: [term_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    users                     users                     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([user_id, term_id])
+    @@index([term_id])
+    @@index([user_id])
+}
+
+model timelogs {
+    id               Int             @id @default(autoincrement())
+    time_spent       Int
+    user_id          Int?
+    created_at       DateTime        @db.Timestamp(6)
+    updated_at       DateTime        @db.Timestamp(6)
+    issue_id         Int?
+    merge_request_id Int?
+    spent_at         DateTime?       @db.Timestamptz(6)
+    issues           issues?         @relation(fields: [issue_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    merge_requests   merge_requests? @relation(fields: [merge_request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([issue_id])
+    @@index([merge_request_id])
+    @@index([user_id])
+}
+
+model todos {
+    id                           Int         @id @default(autoincrement())
+    user_id                      Int
+    project_id                   Int?
+    target_id                    Int?
+    target_type                  String      @db.VarChar
+    author_id                    Int
+    action                       Int
+    state                        String      @db.VarChar
+    created_at                   DateTime?   @db.Timestamp(6)
+    updated_at                   DateTime?   @db.Timestamp(6)
+    note_id                      Int?
+    commit_id                    String?     @db.VarChar
+    group_id                     Int?
+    users_todos_author_idTousers users       @relation("todos_author_idTousers", fields: [author_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    namespaces                   namespaces? @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    notes                        notes?      @relation(fields: [note_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    projects                     projects?   @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users_todos_user_idTousers   users       @relation("todos_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([author_id])
+    @@index([commit_id])
+    @@index([group_id])
+    @@index([note_id])
+    @@index([project_id])
+    @@index([target_type, target_id])
+    @@index([user_id])
+}
+
+model trending_projects {
+    id         Int      @id @default(autoincrement())
+    project_id Int      @unique
+    projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model u2f_registrations {
+    id          Int      @id @default(autoincrement())
+    certificate String?
+    key_handle  String?  @db.VarChar
+    public_key  String?  @db.VarChar
+    counter     Int?
+    user_id     Int?
+    created_at  DateTime @db.Timestamp(6)
+    updated_at  DateTime @db.Timestamp(6)
+    name        String?  @db.VarChar
+    users       users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    @@index([key_handle])
+    @@index([user_id])
+}
+
+model uploads {
+    id          Int      @id @default(autoincrement())
+    size        BigInt
+    path        String   @db.VarChar(511)
+    checksum    String?  @db.VarChar(64)
+    model_id    Int?
+    model_type  String?  @db.VarChar
+    uploader    String   @db.VarChar
+    created_at  DateTime @db.Timestamp(6)
+    mount_point String?  @db.VarChar
+    secret      String?  @db.VarChar
+    store       Int?
+
+    @@index([checksum])
+    @@index([model_id, model_type])
+    @@index([store])
+    @@index([uploader, path])
+}
+
+model user_agent_details {
+    id           Int      @id @default(autoincrement())
+    user_agent   String   @db.VarChar
+    ip_address   String   @db.VarChar
+    subject_id   Int
+    subject_type String   @db.VarChar
+    submitted    Boolean  @default(false)
+    created_at   DateTime @db.Timestamp(6)
+    updated_at   DateTime @db.Timestamp(6)
+
+    @@index([subject_id, subject_type])
+}
+
+model user_callouts {
+    id           Int   @id @default(autoincrement())
+    feature_name Int
+    user_id      Int
+    users        users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([user_id, feature_name])
+    @@index([user_id])
+}
+
+model user_custom_attributes {
+    id         Int      @id @default(autoincrement())
+    created_at DateTime @db.Timestamptz(6)
+    updated_at DateTime @db.Timestamptz(6)
+    user_id    Int
+    key        String   @db.VarChar
+    value      String   @db.VarChar
+    users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([user_id, key])
+    @@index([key, value])
+}
+
+model user_interacted_projects {
+    user_id    Int
+    project_id Int
+    projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([project_id, user_id])
+    @@index([user_id])
+}
+
+model user_preferences {
+    id                         Int      @id @default(autoincrement())
+    user_id                    Int      @unique
+    issue_notes_filter         Int      @default(0) @db.SmallInt
+    merge_request_notes_filter Int      @default(0) @db.SmallInt
+    created_at                 DateTime @db.Timestamptz(6)
+    updated_at                 DateTime @db.Timestamptz(6)
+    first_day_of_week          Int?
+    issues_sort                String?  @db.VarChar
+    merge_requests_sort        String?  @db.VarChar
+    timezone                   String?  @db.VarChar
+    time_display_relative      Boolean?
+    time_format_in_24h         Boolean?
+    users                      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model user_statuses {
+    user_id                 Int     @id @default(autoincrement())
+    cached_markdown_version Int?
+    emoji                   String  @default("speech_balloon") @db.VarChar
+    message                 String? @db.VarChar(100)
+    message_html            String? @db.VarChar
+    users                   users   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([user_id])
+}
+
+model user_synced_attributes_metadata {
+    id              Int      @id @default(autoincrement())
+    name_synced     Boolean? @default(false)
+    email_synced    Boolean? @default(false)
+    location_synced Boolean? @default(false)
+    user_id         Int      @unique
+    provider        String?  @db.VarChar
+    users           users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model users {
+    id                                                                     Int                                  @id @default(autoincrement())
+    email                                                                  String                               @unique @default("") @db.VarChar
+    encrypted_password                                                     String                               @default("") @db.VarChar
+    reset_password_token                                                   String?                              @unique @db.VarChar
+    reset_password_sent_at                                                 DateTime?                            @db.Timestamp(6)
+    remember_created_at                                                    DateTime?                            @db.Timestamp(6)
+    sign_in_count                                                          Int?                                 @default(0)
+    current_sign_in_at                                                     DateTime?                            @db.Timestamp(6)
+    last_sign_in_at                                                        DateTime?                            @db.Timestamp(6)
+    current_sign_in_ip                                                     String?                              @db.VarChar
+    last_sign_in_ip                                                        String?                              @db.VarChar
+    created_at                                                             DateTime?                            @db.Timestamp(6)
+    updated_at                                                             DateTime?                            @db.Timestamp(6)
+    name                                                                   String?                              @db.VarChar
+    admin                                                                  Boolean                              @default(false)
+    projects_limit                                                         Int
+    skype                                                                  String                               @default("") @db.VarChar
+    linkedin                                                               String                               @default("") @db.VarChar
+    twitter                                                                String                               @default("") @db.VarChar
+    bio                                                                    String?                              @db.VarChar
+    failed_attempts                                                        Int?                                 @default(0)
+    locked_at                                                              DateTime?                            @db.Timestamp(6)
+    username                                                               String?                              @db.VarChar
+    can_create_group                                                       Boolean                              @default(true)
+    can_create_team                                                        Boolean                              @default(true)
+    state                                                                  String?                              @db.VarChar
+    color_scheme_id                                                        Int                                  @default(1)
+    password_expires_at                                                    DateTime?                            @db.Timestamp(6)
+    created_by_id                                                          Int?
+    last_credential_check_at                                               DateTime?                            @db.Timestamp(6)
+    avatar                                                                 String?                              @db.VarChar
+    confirmation_token                                                     String?                              @unique @db.VarChar
+    confirmed_at                                                           DateTime?                            @db.Timestamp(6)
+    confirmation_sent_at                                                   DateTime?                            @db.Timestamp(6)
+    unconfirmed_email                                                      String?                              @db.VarChar
+    hide_no_ssh_key                                                        Boolean?                             @default(false)
+    website_url                                                            String                               @default("") @db.VarChar
+    notification_email                                                     String?                              @db.VarChar
+    hide_no_password                                                       Boolean?                             @default(false)
+    password_automatically_set                                             Boolean?                             @default(false)
+    location                                                               String?                              @db.VarChar
+    encrypted_otp_secret                                                   String?                              @db.VarChar
+    encrypted_otp_secret_iv                                                String?                              @db.VarChar
+    encrypted_otp_secret_salt                                              String?                              @db.VarChar
+    otp_required_for_login                                                 Boolean                              @default(false)
+    otp_backup_codes                                                       String?
+    public_email                                                           String                               @default("") @db.VarChar
+    dashboard                                                              Int?                                 @default(0)
+    project_view                                                           Int?                                 @default(0)
+    consumed_timestep                                                      Int?
+    layout                                                                 Int?                                 @default(0)
+    hide_project_limit                                                     Boolean?                             @default(false)
+    unlock_token                                                           String?                              @db.VarChar
+    otp_grace_period_started_at                                            DateTime?                            @db.Timestamp(6)
+    external                                                               Boolean?                             @default(false)
+    incoming_email_token                                                   String?                              @db.VarChar
+    organization                                                           String?                              @db.VarChar
+    require_two_factor_authentication_from_group                           Boolean                              @default(false)
+    two_factor_grace_period                                                Int                                  @default(48)
+    ghost                                                                  Boolean?
+    last_activity_on                                                       DateTime?                            @db.Date
+    notified_of_own_activity                                               Boolean?
+    preferred_language                                                     String?                              @db.VarChar
+    theme_id                                                               Int?                                 @db.SmallInt
+    accepted_term_id                                                       Int?
+    feed_token                                                             String?                              @db.VarChar
+    private_profile                                                        Boolean?
+    include_private_contributions                                          Boolean?
+    commit_email                                                           String?                              @db.VarChar
+    application_setting_terms                                              application_setting_terms?           @relation(fields: [accepted_term_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    application_settings                                                   application_settings[]
+    board_group_recent_visits                                              board_group_recent_visits[]
+    board_project_recent_visits                                            board_project_recent_visits[]
+    ci_pipeline_schedules                                                  ci_pipeline_schedules[]
+    ci_triggers                                                            ci_triggers[]
+    clusters                                                               clusters[]
+    events                                                                 events[]
+    gpg_keys                                                               gpg_keys[]
+    issue_assignees                                                        issue_assignees[]
+    issues_issues_author_idTousers                                         issues[]                             @relation("issues_author_idTousers")
+    issues_issues_closed_by_idTousers                                      issues[]                             @relation("issues_closed_by_idTousers")
+    issues_issues_updated_by_idTousers                                     issues[]                             @relation("issues_updated_by_idTousers")
+    lfs_file_locks                                                         lfs_file_locks[]
+    members                                                                members[]
+    merge_request_assignees                                                merge_request_assignees[]
+    merge_request_metrics_merge_request_metrics_latest_closed_by_idTousers merge_request_metrics[]              @relation("merge_request_metrics_latest_closed_by_idTousers")
+    merge_request_metrics_merge_request_metrics_merged_by_idTousers        merge_request_metrics[]              @relation("merge_request_metrics_merged_by_idTousers")
+    merge_requests_merge_requests_assignee_idTousers                       merge_requests[]                     @relation("merge_requests_assignee_idTousers")
+    merge_requests_merge_requests_author_idTousers                         merge_requests[]                     @relation("merge_requests_author_idTousers")
+    merge_requests_merge_requests_merge_user_idTousers                     merge_requests[]                     @relation("merge_requests_merge_user_idTousers")
+    merge_requests_merge_requests_updated_by_idTousers                     merge_requests[]                     @relation("merge_requests_updated_by_idTousers")
+    merge_trains                                                           merge_trains[]
+    notification_settings                                                  notification_settings[]
+    personal_access_tokens                                                 personal_access_tokens[]
+    project_authorizations                                                 project_authorizations[]
+    protected_tag_create_access_levels                                     protected_tag_create_access_levels[]
+    releases                                                               releases[]
+    resource_label_events                                                  resource_label_events[]
+    term_agreements                                                        term_agreements[]
+    todos_todos_author_idTousers                                           todos[]                              @relation("todos_author_idTousers")
+    todos_todos_user_idTousers                                             todos[]                              @relation("todos_user_idTousers")
+    u2f_registrations                                                      u2f_registrations[]
+    user_callouts                                                          user_callouts[]
+    user_custom_attributes                                                 user_custom_attributes[]
+    user_interacted_projects                                               user_interacted_projects[]
+    user_preferences                                                       user_preferences?
+    user_statuses                                                          user_statuses?
+    user_synced_attributes_metadata                                        user_synced_attributes_metadata?
+
+    @@index([accepted_term_id])
+    @@index([admin])
+    @@index([created_at])
+    @@index([email])
+    @@index([feed_token])
+    @@index([ghost])
+    @@index([incoming_email_token])
+    @@index([name])
+    @@index([state])
+    @@index([username])
+}
+
+model users_star_projects {
+    id         Int       @id @default(autoincrement())
+    project_id Int
+    user_id    Int
+    created_at DateTime? @db.Timestamp(6)
+    updated_at DateTime? @db.Timestamp(6)
+    projects   projects  @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@unique([user_id, project_id])
+    @@index([project_id])
+}
+
+model web_hook_logs {
+    id                     Int       @id @default(autoincrement())
+    web_hook_id            Int
+    trigger                String?   @db.VarChar
+    url                    String?   @db.VarChar
+    request_headers        String?
+    request_data           String?
+    response_headers       String?
+    response_body          String?
+    response_status        String?   @db.VarChar
+    execution_duration     Float?
+    internal_error_message String?   @db.VarChar
+    created_at             DateTime  @db.Timestamp(6)
+    updated_at             DateTime  @db.Timestamp(6)
+    web_hooks              web_hooks @relation(fields: [web_hook_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+    @@index([created_at, web_hook_id])
+    @@index([web_hook_id])
+}
+
+model web_hooks {
+    id                         Int             @id @default(autoincrement())
+    project_id                 Int?
+    created_at                 DateTime?       @db.Timestamp(6)
+    updated_at                 DateTime?       @db.Timestamp(6)
+    type                       String?         @default("ProjectHook") @db.VarChar
+    service_id                 Int?
+    push_events                Boolean         @default(true)
+    issues_events              Boolean         @default(false)
+    merge_requests_events      Boolean         @default(false)
+    tag_push_events            Boolean?        @default(false)
+    note_events                Boolean         @default(false)
+    enable_ssl_verification    Boolean?        @default(true)
+    wiki_page_events           Boolean         @default(false)
+    pipeline_events            Boolean         @default(false)
+    confidential_issues_events Boolean         @default(false)
+    repository_update_events   Boolean         @default(false)
+    job_events                 Boolean         @default(false)
+    confidential_note_events   Boolean?
+    push_events_branch_filter  String?
+    encrypted_token            String?         @db.VarChar
+    encrypted_token_iv         String?         @db.VarChar
+    encrypted_url              String?         @db.VarChar
+    encrypted_url_iv           String?         @db.VarChar
+    projects                   projects?       @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    web_hook_logs              web_hook_logs[]
+
+    @@index([project_id])
+    @@index([type])
+}

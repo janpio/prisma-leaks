@@ -1,9 +1,14 @@
-name: test
+name: monitor memory usage
 on: push
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        exposeGc: [true, false]
+        tests: [2, 10]
+        engine: ["library", "binary"]
     services:
       postgres:
         image: postgres
@@ -22,7 +27,16 @@ jobs:
       DATABASE_URL: "postgresql://postgres:example@localhost"
     steps:
       - uses: actions/checkout@v2
-      - run: yarn
-      - run: npx prisma db push
-      - run: yarn test --runInBand --logHeapUsage
-      - run: yarn test --runInBand --detectLeaks query
+      - name: setup
+        run: |
+          yarn
+          python inflate_tests.py ${{matrix.tests}}
+          yarn prisma db push --schema prisma/${{matrix.engine}}.prisma
+
+      - name: test
+        if: ${{matrix.exposeGc == false}}
+        run: yarn test --runInBand --logHeapUsage --no-cache
+
+      - name: test with exposed garbage collector
+        if: ${{matrix.exposeGc == true }}
+        run: node --expose-gc ./node_modules/.bin/jest --runInBand --logHeapUsage --no-cache
