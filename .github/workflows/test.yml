@@ -28,5 +28,5 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn
       - run: python inflate_tests.py ${{matrix.tests}}
-      - run: npx prisma db push --schema prisma/${{matrix.engine}}.prisma
+      - run: yarn prisma db push --schema prisma/${{matrix.engine}}.prisma
       - run: node --expose-gc ./node_modules/.bin/jest --runInBand --logHeapUsage --no-cache
