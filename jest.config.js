@@ -5,4 +5,5 @@ module.exports = {
   verbose: false,
   collectCoverage: false,
   silent: true,
+  testTimeout: 30000,
 };
