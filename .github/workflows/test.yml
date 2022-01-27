@@ -5,9 +5,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         exposeGc: [true, false]
-        tests: [2, 10]
+        tests: [10, 50]
+        schemaSize: ["large", "small"]
         engine: ["library", "binary"]
     services:
       postgres:
@@ -27,11 +29,16 @@ jobs:
       DATABASE_URL: "postgresql://postgres:example@localhost"
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: yarn
+
       - name: setup
         run: |
           yarn
           python inflate_tests.py ${{matrix.tests}}
-          yarn prisma db push --schema prisma/${{matrix.engine}}.prisma
+          yarn prisma db push --schema prisma/${{matrix.schemaSize}}-${{matrix.engine}}.prisma
 
       - name: test
         if: ${{matrix.exposeGc == false}}
