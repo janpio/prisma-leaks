@@ -1,5 +1,12 @@
 # Library / binary Prisma engine heap size usage
 
+## Comparison against modified engine with logging disabled
+
+Source: https://github.com/driimus/prisma-leaks/actions/runs/1775511731
+
+![nolog_light](https://user-images.githubusercontent.com/32523430/151893157-fd074339-bf15-483d-8df0-c11e6025e9a6.png#gh-light-mode-only)
+![nolog_dark](https://user-images.githubusercontent.com/32523430/151893159-0f41cdd6-87ec-4e51-acc6-d9a865ba43ea.png#gh-dark-mode-only)
+
 ## Comparison based on schema size
 
 Source: https://github.com/driimus/prisma-leaks/actions/runs/1758767074
@@ -240,3 +247,4 @@ PASS test tests/copy50.test.js (289 MB heap size)
 
 ![heapsize_small_schema](https://user-images.githubusercontent.com/32523430/151464927-44ac2f99-4122-4430-a81b-a684ff15cd98.png#gh-light-mode-only)
 ![heap_small_dark](https://user-images.githubusercontent.com/32523430/151465733-496e4156-6e30-4d59-b35e-cb37de5ca576.png#gh-dark-mode-only)
+
